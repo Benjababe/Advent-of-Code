@@ -1,0 +1,58 @@
+{
+    "tasks": [
+        {
+            "detail": "Ensure g++.exe directory is in PATH variable",
+            "type": "cppbuild",
+            "label": "C/C++: g++.exe build active file",
+            "command": "g++.exe",
+            "args": [
+                "-std=c++17",
+                "-fdiagnostics-color=always",
+                "-g",
+                "-I${workspaceFolder}\\include",
+                "${file}",
+                "${workspaceFolder}\\include\\*.cpp",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "detail": "Ensure g++.exe directory is in PATH variable",
+            "type": "cppbuild",
+            "label": "C/C++: g++.exe build active file O3",
+            "command": "g++.exe",
+            "args": [
+                "-O3",
+                "-std=c++17",
+                "-fdiagnostics-color=always",
+                "-g",
+                "-I${workspaceFolder}\\include",
+                "${file}",
+                "${workspaceFolder}\\include\\*.cpp",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        }
+    ],
+    "version": "2.0.0"
+}
