@@ -16,6 +16,11 @@ func GetLines(lines *[]string, relFilePath string) {
 
 	absPath := path.Join(path.Dir(filename), relFilePath)
 
+	_, err := os.Stat(absPath)
+	if os.IsNotExist(err) {
+		panic("File does not exist!")
+	}
+
 	content, err := os.ReadFile(absPath)
 	if err != nil {
 		panic(err)
