@@ -8,7 +8,7 @@ import (
 	"github.com/benjababe/advent-of-code/helper"
 )
 
-func findFirst(numMap map[string]string, line string) int {
+func findFirst(numMap map[string]int, line string) int {
 	for len(line) > 0 {
 		for num := int64(1); num < 10; num++ {
 			if string(line[0]) == strconv.FormatInt(num, 10) {
@@ -18,8 +18,7 @@ func findFirst(numMap map[string]string, line string) int {
 
 		for numText, num := range numMap {
 			if strings.HasPrefix(line, numText) {
-				i, _ := strconv.Atoi(num)
-				return i
+				return num
 			}
 		}
 
@@ -29,7 +28,7 @@ func findFirst(numMap map[string]string, line string) int {
 	return -1
 }
 
-func findLast(numMap map[string]string, line string) int {
+func findLast(numMap map[string]int, line string) int {
 	for len(line) > 0 {
 		lastI := len(line) - 1
 
@@ -41,8 +40,7 @@ func findLast(numMap map[string]string, line string) int {
 
 		for numText, num := range numMap {
 			if strings.HasSuffix(line, numText) {
-				i, _ := strconv.Atoi(num)
-				return i
+				return num
 			}
 		}
 
@@ -55,10 +53,10 @@ func findLast(numMap map[string]string, line string) int {
 func solve(lines []string) int {
 	score := 0
 
-	numMap := map[string]string{
-		"one": "1", "two": "2", "three": "3",
-		"four": "4", "five": "5", "six": "6",
-		"seven": "7", "eight": "8", "nine": "9",
+	numMap := map[string]int{
+		"one": 1, "two": 2, "three": 3,
+		"four": 4, "five": 5, "six": 6,
+		"seven": 7, "eight": 8, "nine": 9,
 	}
 
 	for _, line := range lines {
