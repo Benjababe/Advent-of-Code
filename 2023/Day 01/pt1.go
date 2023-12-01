@@ -41,8 +41,18 @@ func solve(lines []string) int {
 	score := 0
 
 	for _, line := range lines {
-		start := findFirst(line)
-		last := findLast(line)
+		start, last := 0, 0
+
+		for i := 0; i < len(line); i++ {
+			char := line[i]
+			if '0' <= char && char <= '9' {
+				if start == 0 {
+					start = int(char - '0')
+				}
+				last = int(char - '0')
+			}
+		}
+
 		score += start*10 + last
 	}
 

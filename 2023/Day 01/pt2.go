@@ -2,67 +2,52 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/benjababe/advent-of-code/helper"
 )
 
-func findFirst(numMap map[string]int, line string) int {
-	for len(line) > 0 {
-		for num := int64(1); num < 10; num++ {
-			if string(line[0]) == strconv.FormatInt(num, 10) {
-				return int(num)
-			}
-		}
-
+func replaceNumText(numMap map[string]string, line string) string {
+	for true {
+		done := true
 		for numText, num := range numMap {
-			if strings.HasPrefix(line, numText) {
-				return num
+			if strings.Contains(line, numText) {
+				line = strings.ReplaceAll(line, numText, num)
+				done = false
 			}
 		}
 
-		line = line[1:]
+		if done {
+			break
+		}
 	}
-
-	return -1
-}
-
-func findLast(numMap map[string]int, line string) int {
-	for len(line) > 0 {
-		lastI := len(line) - 1
-
-		for num := int64(1); num < 10; num++ {
-			if string(line[lastI]) == strconv.FormatInt(num, 10) {
-				return int(num)
-			}
-		}
-
-		for numText, num := range numMap {
-			if strings.HasSuffix(line, numText) {
-				return num
-			}
-		}
-
-		line = line[:lastI]
-	}
-
-	return -1
+	return line
 }
 
 func solve(lines []string) int {
 	score := 0
 
-	numMap := map[string]int{
-		"one": 1, "two": 2, "three": 3,
-		"four": 4, "five": 5, "six": 6,
-		"seven": 7, "eight": 8, "nine": 9,
+	numMap := map[string]string{
+		"one": "o1e", "two": "t2o", "three": "t3e",
+		"four": "f4r", "five": "f5e", "six": "s6e",
+		"seven": "s7n", "eight": "e8t", "nine": "n9e",
 	}
 
 	for _, line := range lines {
-		first := findFirst(numMap, line)
-		last := findLast(numMap, line)
-		score += first*10 + last
+		start, last := 0, 0
+		line = replaceNumText(numMap, line)
+
+		for i := 0; i < len(line); i++ {
+			char := line[i]
+			if '0' <= char && char <= '9' {
+				if start == 0 {
+					start = int(char - '0')
+				}
+				last = int(char - '0')
+			}
+		}
+
+		score += start*10 + last
 	}
 
 	return score
