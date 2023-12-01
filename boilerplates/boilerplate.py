@@ -7,7 +7,6 @@ def get_lines(filename: str):
 
     f.close()
     return lines
-# end_get_lines
 
 
 def get_score(lines: list[str]) -> int:
@@ -17,7 +16,6 @@ def get_score(lines: list[str]) -> int:
         x = 0
 
     return score
-# end_get_score
 
 
 if __name__ == "__main__":
