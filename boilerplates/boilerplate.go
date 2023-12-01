@@ -7,11 +7,13 @@ import (
 )
 
 func solve(lines []string) int {
-	for _, val := range lines {
-		helper.Unused(val)
+	score := 0
+
+	for _, line := range lines {
+		helper.Unused(line)
 	}
 
-	return 0
+	return score
 }
 
 func main() {
