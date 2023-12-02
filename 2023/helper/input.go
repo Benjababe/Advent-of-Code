@@ -1,10 +1,13 @@
 package helper
 
 import (
+	"fmt"
 	"os"
 	"path"
 	"runtime"
 	"strings"
+
+	"golang.design/x/clipboard"
 )
 
 func GetLines(lines *[]string, relFilePath string) {
@@ -28,4 +31,15 @@ func GetLines(lines *[]string, relFilePath string) {
 
 	strContent := strings.ReplaceAll(string(content), "\r\n", "\n")
 	*lines = strings.Split(strContent, "\n")
+}
+
+func CopyClipboard(toCopy string) {
+	err := clipboard.Init()
+	if err != nil {
+		fmt.Println("Unable to copy to clipboard")
+		return
+	}
+
+	clipboard.Write(clipboard.FmtText, []byte(toCopy))
+	fmt.Printf("%s copied to clipboard", toCopy)
 }

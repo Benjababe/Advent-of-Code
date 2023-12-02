@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/benjababe/advent-of-code/helper"
 )
@@ -25,4 +26,6 @@ func main() {
 	fmt.Printf("Output: %d\n", output)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
+
+	helper.CopyClipboard(strconv.Itoa(output))
 }
