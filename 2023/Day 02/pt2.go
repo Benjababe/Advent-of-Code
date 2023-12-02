@@ -14,22 +14,19 @@ func solve(lines []string) int {
 
 	for _, line := range lines {
 		line = line[strings.Index(line, ":")+1:]
-		minCubes := []int{0, 0, 0}
-		patterns := []string{`(\d+)\sred`, `(\d+)\sgreen`, `(\d+)\sblue`}
+		minCubes := map[string]int{"r": 0, "g": 0, "b": 0}
 
-		for colIndex, pattern := range patterns {
-			regex := regexp.MustCompile(pattern)
-			matches := regex.FindAllStringSubmatch(line, -1)
+		r := regexp.MustCompile(`(\d+)\s(r|g|b)`)
+		matches := r.FindAllStringSubmatch(line, -1)
 
-			for _, match := range matches {
-				count, _ := strconv.Atoi(match[1])
-				if count > minCubes[colIndex] {
-					minCubes[colIndex] = count
-				}
+		for _, match := range matches {
+			count, _ := strconv.Atoi(match[1])
+			if count > minCubes[match[2]] {
+				minCubes[match[2]] = count
 			}
 		}
 
-		score += minCubes[0] * minCubes[1] * minCubes[2]
+		score += minCubes["r"] * minCubes["g"] * minCubes["b"]
 	}
 
 	return score
@@ -37,7 +34,7 @@ func solve(lines []string) int {
 
 func main() {
 	lines := []string{}
-	helper.GetLines(&lines, "input.txt")
+	helper.GetLines(&lines, "bigboy03.txt")
 
 	start := helper.GetCurrentTime()
 	output := solve(lines)

@@ -11,27 +11,25 @@ import (
 
 func solve(lines []string) int {
 	score := 0
-	cubeMax := []int{12, 13, 14}
+	cubeMax := map[string]int{"r": 12, "g": 13, "b": 14}
 
 	for i, line := range lines {
 		line = line[strings.Index(line, ":")+1:]
 		possible := true
-		patterns := []string{`(\d+)\sred`, `(\d+)\sgreen`, `(\d+)\sblue`}
 
-		for colIndex, pattern := range patterns {
-			regex := regexp.MustCompile(pattern)
-			matches := regex.FindAllStringSubmatch(line, -1)
+		r := regexp.MustCompile(`(\d+)\s(r|g|b)`)
+		matches := r.FindAllStringSubmatch(line, -1)
 
-			for _, match := range matches {
-				count, _ := strconv.Atoi(match[1])
-				if count > cubeMax[colIndex] {
-					possible = false
-				}
+		for _, match := range matches {
+			count, _ := strconv.Atoi(match[1])
+			if count > cubeMax[match[2]] {
+				possible = false
+				break
 			}
 		}
 
 		if possible {
-			score += i + 1
+			score += i
 		}
 	}
 
