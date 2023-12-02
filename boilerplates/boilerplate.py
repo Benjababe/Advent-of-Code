@@ -1,3 +1,6 @@
+import subprocess
+
+
 def get_lines(filename: str):
     lines = []
 
@@ -23,3 +26,5 @@ if __name__ == "__main__":
     score = get_score(lines)
 
     print(f"Score: {score}")
+    subprocess.run("clip", text=True, input=str(score))
+    print(f"{score} copied to the clipboard")
