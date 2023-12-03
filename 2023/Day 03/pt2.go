@@ -40,7 +40,7 @@ func getNumsAdjacent(grid [][]Cell, i int, j int) []int64 {
 	for _i := -1; _i <= 1; _i++ {
 		for _j := -1; _j <= 1; _j++ {
 			di, dj := i+_i, j+_j
-			if di < 0 || di >= len(grid) || dj < 0 || dj >= len(grid) {
+			if di < 0 || di >= len(grid) || dj < 0 || dj >= len(grid[di]) {
 				continue
 			}
 
