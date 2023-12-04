@@ -7,8 +7,8 @@ import (
 	"github.com/benjababe/advent-of-code/helper"
 )
 
-func solve(lines []string) int {
-	score := 0
+func solve(lines []string) int64 {
+	score := int64(0)
 
 	for _, line := range lines {
 		helper.Unused(line)
@@ -27,5 +27,5 @@ func main() {
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
 
-	helper.CopyClipboard(strconv.Itoa(output))
+	helper.CopyClipboard(strconv.FormatInt(output, 10))
 }
