@@ -10,9 +10,9 @@ import (
 	"github.com/benjababe/advent-of-code/helper"
 )
 
-func solve(lines []string) int {
-	score := 0
-	cardCount := make(map[int]int)
+func solve(lines []string) int64 {
+	score := int64(0)
+	cardCount := make(map[int]int64)
 
 	for i, line := range lines {
 		if cardCount[i] == 0 {
@@ -59,5 +59,5 @@ func main() {
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
 
-	helper.CopyClipboard(strconv.Itoa(output))
+	helper.CopyClipboard(strconv.FormatInt(output, 10))
 }
