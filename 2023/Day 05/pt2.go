@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
-	"sync"
 
 	"github.com/benjababe/advent-of-code/helper"
 )
@@ -13,8 +12,8 @@ type FarmMap = map[string](map[string][]FarmTransform)
 type CatMap = map[string]string
 
 type FarmTransform struct {
-	dstStart int64
 	srcStart int64
+	dstStart int64
 	rng      int64
 }
 
@@ -36,32 +35,31 @@ func populateMaps(farmMap FarmMap, categoryMap CatMap, lines []string) {
 		mapMatch := mapRegex.FindStringSubmatch(line)
 		if mapMatch != nil {
 			from, to = mapMatch[1], mapMatch[2]
-			farmMap[from] = make(map[string][]FarmTransform)
-			farmMap[from][to] = make([]FarmTransform, 0)
-			categoryMap[from] = to
+			farmMap[to] = make(map[string][]FarmTransform)
+			farmMap[to][from] = make([]FarmTransform, 0)
+			categoryMap[to] = from
 			continue
 		}
 
 		rngMatch := rngRegex.FindStringSubmatch(line)
 		if rngMatch != nil {
-			dstStart, _ := strconv.ParseInt(rngMatch[1], 10, 64)
-			srcStart, _ := strconv.ParseInt(rngMatch[2], 10, 64)
+			srcStart, _ := strconv.ParseInt(rngMatch[1], 10, 64)
+			dstStart, _ := strconv.ParseInt(rngMatch[2], 10, 64)
 			rng, _ := strconv.ParseInt(rngMatch[3], 10, 64)
 
-			tfs := farmMap[from][to]
-			tfs = append(tfs, FarmTransform{dstStart, srcStart, rng})
-			farmMap[from][to] = tfs
+			tfs := farmMap[to][from]
+			tfs = append(tfs, FarmTransform{srcStart, dstStart, rng})
+			farmMap[to][from] = tfs
 		}
 	}
 }
 
-func iterateSeedPair(farmMap FarmMap, categoryMap CatMap, seedPair SeedPair, lowest *int64, wg *sync.WaitGroup) {
-	for inc := int64(0); inc < seedPair.rng; inc++ {
-		category := "seed"
-		seedVal := seedPair.start + inc
-		catVal := seedVal
+func getLowestLocation(farmMap FarmMap, categoryMap CatMap, seedPairs []SeedPair) int64 {
+	for loc := int64(0); loc < 1e11; loc++ {
+		category := "location"
+		catVal := loc
 
-		for category != "location" {
+		for category != "seed" {
 			newCategory := categoryMap[category]
 
 			for _, tsf := range farmMap[category][newCategory] {
@@ -74,25 +72,14 @@ func iterateSeedPair(farmMap FarmMap, categoryMap CatMap, seedPair SeedPair, low
 			category = newCategory
 		}
 
-		if catVal < *lowest {
-			*lowest = catVal
-			fmt.Printf("New lowest location is %d with seed %d\n", catVal, seedVal)
+		for _, seedPair := range seedPairs {
+			if seedPair.start <= catVal && catVal <= seedPair.start+seedPair.rng {
+				return loc
+			}
 		}
 	}
-	wg.Done()
-}
 
-func getLowestLocation(farmMap FarmMap, categoryMap CatMap, seedPairs []SeedPair) int64 {
-	lowest := int64(1e11)
-	var wg sync.WaitGroup
-
-	for _, seedPair := range seedPairs {
-		wg.Add(1)
-		go iterateSeedPair(farmMap, categoryMap, seedPair, &lowest, &wg)
-	}
-	wg.Wait()
-
-	return lowest
+	return -1
 }
 
 func solve(lines []string) int64 {
