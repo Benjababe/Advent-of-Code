@@ -33,7 +33,7 @@ func solve(lines []string) (int64, int64) {
 	p1, p2 := int64(0), int64(0)
 
 	for _, line := range lines {
-		preds, _ := helper.SliceInt64ToStr(strings.Split(line, " "))
+		preds, _ := helper.SliceStrToInt64(strings.Split(line, " "))
 		v1, v2 := iterPredictions(preds)
 		p1 += v1
 		p2 += v2
