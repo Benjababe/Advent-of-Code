@@ -22,7 +22,7 @@ func SlicesAny[T any](slice []T, pred func(T) bool) bool {
 	return false
 }
 
-func SliceInt64ToStr(slice []string) ([]int64, error) {
+func SliceStrToInt64(slice []string) ([]int64, error) {
 	int64Slice := make([]int64, len(slice))
 	for i, elem := range slice {
 		num, err := strconv.ParseInt(elem, 10, 64)
