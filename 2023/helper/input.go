@@ -2,6 +2,8 @@ package helper
 
 import (
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"path"
 	"runtime"
@@ -27,6 +29,22 @@ func GetLines(lines *[]string, relFilePath string) {
 	content, err := os.ReadFile(absPath)
 	if err != nil {
 		panic(err)
+	}
+
+	strContent := strings.ReplaceAll(string(content), "\r\n", "\n")
+	*lines = strings.Split(strContent, "\n")
+}
+
+func GetLinesUrl(lines *[]string, url string) {
+	res, err := http.Get(url)
+	if err != nil {
+		panic("Error with retrieving input URL")
+	}
+	defer res.Body.Close()
+
+	content, err := io.ReadAll(res.Body)
+	if err != nil {
+		panic("Error reading URL response body")
 	}
 
 	strContent := strings.ReplaceAll(string(content), "\r\n", "\n")
