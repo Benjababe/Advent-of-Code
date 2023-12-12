@@ -9,3 +9,9 @@ func SortString(s string) string {
 	})
 	return string(chars)
 }
+
+func StringReplaceIndex(s string, i int, r rune) string {
+	out := []rune(s)
+	out[i] = r
+	return string(out)
+}
