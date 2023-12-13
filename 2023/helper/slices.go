@@ -62,3 +62,18 @@ func SliceRepeat[T int | int64 | string](slice []T, n int) []T {
 	}
 	return repeated
 }
+
+func SliceTranspose[T int | int64 | string](slice [][]T) [][]T {
+	xl := len(slice[0])
+	yl := len(slice)
+	result := make([][]T, xl)
+	for i := range result {
+		result[i] = make([]T, yl)
+	}
+	for i := 0; i < xl; i++ {
+		for j := 0; j < yl; j++ {
+			result[i][j] = slice[j][i]
+		}
+	}
+	return result
+}
