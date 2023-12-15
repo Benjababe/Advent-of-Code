@@ -77,3 +77,13 @@ func SliceTranspose[T int | int64 | string](slice [][]T) [][]T {
 	}
 	return result
 }
+
+func SliceFilter[T int | int64 | string](slice []T, pred func(T) bool) []T {
+	filtered := []T{}
+	for _, v := range slice {
+		if pred(v) {
+			filtered = append(filtered, v)
+		}
+	}
+	return filtered
+}
