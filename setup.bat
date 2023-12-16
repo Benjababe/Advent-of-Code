@@ -6,6 +6,5 @@ set path="%year%\Day %day%"
 
 mkdir %path%
 copy boilerplates\boilerplate.py %path%\test.py
-copy boilerplates\boilerplate.go %path%\pt1.go
-copy boilerplates\boilerplate.go %path%\pt2.go
+copy boilerplates\boilerplate.go %path%\pt1_2.go
 echo. > %path%\input.txt
