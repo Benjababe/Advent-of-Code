@@ -62,10 +62,9 @@ func traverse() (int64, int64) {
 				nextScore := int64(0)
 				dirChange := dirs[nextDir]
 				dx, dy := dirChange.x, dirChange.y
-				xx, yy := x, y
 
 				for l := 1; l <= stepRange[1]; l++ {
-					xx, yy = xx+dx, yy+dy
+					xx, yy := x+l*dx, y+l*dy
 
 					if 0 <= xx && xx <= maxX && 0 <= yy && yy <= maxY {
 						nextScore += grid[yy][xx]
