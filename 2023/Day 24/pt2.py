@@ -15,18 +15,29 @@ def get_lines(filename: str):
 
 
 def z3_cheating(stones: list[tuple[list[int], list[int]]]):
+    # declare variables to be generated in the system of equations
     x, y, z = z3.Real("x"), z3.Real("y"), z3.Real("z")
     dx, dy, dz = z3.Real("dx"), z3.Real("dy"), z3.Real("dz")
+
     s = z3.Solver()
 
     for i, ((sx, sy, sz), (sdx, sdy, sdz)) in enumerate(stones):
+        # each stone has its own time where it intersects
         t = z3.Real(f"t{i}")
-        s.add(sx + sdx * t == x + dx * t)
-        s.add(sy + sdy * t == y + dy * t)
-        s.add(sz + sdz * t == z + dz * t)
 
+        # add constraint such that the generated position and velocities
+        # will meet at some time t
+        s.add(
+            sx + sdx * t == x + dx * t,
+            sy + sdy * t == y + dy * t,
+            sz + sdz * t == z + dz * t,
+        )
+
+    # magic
     s.check()
     m = s.model()
+
+    print(f"Position: [{m[x]}, {m[y]}, {m[z]}]\nVelocity: [{m[dx]}, {m[dy]}, {m[dz]}]")
     return eval(f"{m[x]} + {m[y]} + {m[z]}")
 
 
