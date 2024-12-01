@@ -1,16 +1,18 @@
-use const_format::concatcp;
 use std::{
     collections::HashSet,
     fs::File,
     io::{BufRead, BufReader},
+    time::Instant,
 };
 
-const DAY: &str = "_DAY_";
-const INPUT_FILE: &str = concatcp!("src/day_", DAY, "/input.txt");
+const DAY: &str = "01";
 
-fn get_lines() -> Vec<String> {
-    let file = File::open(INPUT_FILE).expect("Unable to open file");
-    let reader = BufReader::new(file);
+fn get_lines(big_boy: bool) -> Vec<String> {
+    let filename: &str = if big_boy { "big_boy" } else { "input" };
+    let input_file: String = format!("src/day_{DAY}/{filename}.txt");
+
+    let file: File = File::open(input_file).expect("Unable to open file");
+    let reader: BufReader<File> = BufReader::new(file);
     return reader
         .lines()
         .map(|line| line.expect("Unable to read line"))
@@ -20,9 +22,7 @@ fn get_lines() -> Vec<String> {
 fn solve_p1(lines: Vec<String>) -> i64 {
     let mut score: i64 = 0;
 
-    for line in lines {
-		
-    }
+    for line in lines {}
 
     return score;
 }
@@ -30,19 +30,21 @@ fn solve_p1(lines: Vec<String>) -> i64 {
 fn solve_p2(lines: Vec<String>) -> i64 {
     let mut score: i64 = 0;
 
-    for line in lines {
-		
-    }
+    for line in lines {}
 
     return score;
 }
 
 pub fn solve() {
-    let lines = get_lines();
+    let lines: Vec<String> = get_lines();
 
-    let sc1 = solve_p1(lines.clone());
-    println!("Part 1: {}", sc1);
+    let s1: Instant = Instant::now();
+    let sc1: i64 = solve_p1(lines.clone());
+    let d1: std::time::Duration = s1.elapsed();
+    println!("Part 1: {}, Took: {:?}", sc1, d1);
 
-    let sc2 = solve_p2(lines.clone());
-    println!("Part 2: {}", sc2);
+    let s2: Instant = Instant::now();
+    let sc2: i64 = solve_p2(lines.clone());
+    let d2: std::time::Duration = s2.elapsed();
+    println!("Part 2: {}, Took: {:?}", sc2, d2);
 }
