@@ -66,8 +66,8 @@ fn solve_p2(lines: Vec<String>) -> i64 {
     return score;
 }
 
-pub fn solve() {
-    let lines: Vec<String> = get_lines(true);
+pub fn solve(big_boy: bool) {
+    let lines: Vec<String> = get_lines(big_boy);
 
     let s1: Instant = Instant::now();
     let sc1: i64 = solve_p1(lines.clone());

@@ -5,7 +5,7 @@ use std::{
     time::Instant,
 };
 
-const DAY: &str = "01";
+const DAY: &str = "_DAY_";
 
 fn get_lines(big_boy: bool) -> Vec<String> {
     let filename: &str = if big_boy { "big_boy" } else { "input" };
@@ -35,8 +35,8 @@ fn solve_p2(lines: Vec<String>) -> i64 {
     return score;
 }
 
-pub fn solve() {
-    let lines: Vec<String> = get_lines();
+pub fn solve(big_boy: bool) {
+    let lines: Vec<String> = get_lines(big_boy);
 
     let s1: Instant = Instant::now();
     let sc1: i64 = solve_p1(lines.clone());
