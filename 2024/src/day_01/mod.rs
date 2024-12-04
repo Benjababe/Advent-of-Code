@@ -8,7 +8,7 @@ use std::{
 const DAY: &str = "01";
 
 fn get_lines(big_boy: bool) -> Vec<String> {
-    let filename: &str = if big_boy { "big_boy" } else { "input" };
+    let filename: &str = if big_boy { "bigboy" } else { "input" };
     let input_file: String = format!("src/day_{DAY}/{filename}.txt");
 
     let file: File = File::open(input_file).expect("Unable to open file");
