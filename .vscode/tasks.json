@@ -11,7 +11,7 @@
         "-g",
         "-I${workspaceFolder}\\include",
         "${file}",
-        "${workspaceFolder}\\include\\*.cpp",
+        "${workspaceFolder}\\include\\helper.cpp",
         "-o",
         "${fileDirname}\\${fileBasenameNoExtension}.exe"
       ],
@@ -36,7 +36,7 @@
         "-g",
         "-I${workspaceFolder}\\include",
         "${file}",
-        "${workspaceFolder}\\include\\*.cpp",
+        "${workspaceFolder}\\include\\helper.cpp",
         "-o",
         "${fileDirname}\\${fileBasenameNoExtension}.exe"
       ],
