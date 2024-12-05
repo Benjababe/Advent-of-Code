@@ -1,58 +1,76 @@
 {
-    "tasks": [
-        {
-            "detail": "Ensure g++.exe directory is in PATH variable",
-            "type": "cppbuild",
-            "label": "C/C++: g++.exe build active file",
-            "command": "g++.exe",
-            "args": [
-                "-std=c++17",
-                "-fdiagnostics-color=always",
-                "-g",
-                "-I${workspaceFolder}\\include",
-                "${file}",
-                "${workspaceFolder}\\include\\*.cpp",
-                "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
-            ],
-            "options": {
-                "cwd": "${fileDirname}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            }
-        },
-        {
-            "detail": "Ensure g++.exe directory is in PATH variable",
-            "type": "cppbuild",
-            "label": "C/C++: g++.exe build active file O3",
-            "command": "g++.exe",
-            "args": [
-                "-O3",
-                "-std=c++17",
-                "-fdiagnostics-color=always",
-                "-g",
-                "-I${workspaceFolder}\\include",
-                "${file}",
-                "${workspaceFolder}\\include\\*.cpp",
-                "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
-            ],
-            "options": {
-                "cwd": "${fileDirname}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            }
-        }
-    ],
-    "version": "2.0.0"
+  "tasks": [
+    {
+      "detail": "Ensure g++.exe directory is in PATH variable",
+      "type": "cppbuild",
+      "label": "C/C++: g++.exe build active file",
+      "command": "g++.exe",
+      "args": [
+        "-std=c++17",
+        "-fdiagnostics-color=always",
+        "-g",
+        "-I${workspaceFolder}\\include",
+        "${file}",
+        "${workspaceFolder}\\include\\*.cpp",
+        "-o",
+        "${fileDirname}\\${fileBasenameNoExtension}.exe"
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
+    },
+    {
+      "detail": "Ensure g++.exe directory is in PATH variable",
+      "type": "cppbuild",
+      "label": "C/C++: g++.exe build active file O3",
+      "command": "g++.exe",
+      "args": [
+        "-O3",
+        "-std=c++17",
+        "-fdiagnostics-color=always",
+        "-g",
+        "-I${workspaceFolder}\\include",
+        "${file}",
+        "${workspaceFolder}\\include\\*.cpp",
+        "-o",
+        "${fileDirname}\\${fileBasenameNoExtension}.exe"
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
+    },
+    {
+      "label": "Cargo Debug Build 2024",
+      "type": "shell",
+      "command": "cargo build --manifest-path 2024/Cargo.toml",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$rustc"],
+      "detail": "Builds 2024 project using Cargo"
+    },
+    {
+      "label": "Cargo Release Build 2024",
+      "type": "shell",
+      "command": "cargo build --manifest-path 2024/Cargo.toml --release",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$rustc"],
+      "detail": "Builds 2024 project using Cargo"
+    }
+  ],
+  "version": "2.0.0"
 }

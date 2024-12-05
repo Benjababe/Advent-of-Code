@@ -136,10 +136,10 @@ pub fn solve(big_boy: bool) {
     let s1: Instant = Instant::now();
     let sc1: i64 = solve_p1(lines.clone());
     let d1: std::time::Duration = s1.elapsed();
-    println!("Part 1: {}, Took: {:?}", sc1, d1);
+    println!("Day {} Part 1: {}, Took: {:?}", DAY, sc1, d1);
 
     let s2: Instant = Instant::now();
     let sc2: i64 = solve_p2(lines.clone());
     let d2: std::time::Duration = s2.elapsed();
-    println!("Part 2: {}, Took: {:?}", sc2, d2);
+    println!("Day {} Part 2: {}, Took: {:?}", DAY, sc2, d2);
 }

@@ -1,11 +1,10 @@
-use regex::Regex;
 use std::{
     fs::{File, OpenOptions},
     io::{BufRead, BufReader},
     time::Instant,
 };
 
-const DAY: &str = "03";
+const DAY: &str = "06";
 
 fn get_lines(big_boy: bool) -> Vec<String> {
     let filename: &str = if big_boy { "bigboy" } else { "input" };
@@ -28,39 +27,16 @@ fn get_lines(big_boy: bool) -> Vec<String> {
 
 fn solve_p1(lines: Vec<String>) -> i64 {
     let mut score: i64 = 0;
-    let pattern: &str = r"mul\((\d{1,3}),(\d{1,3})\)";
-    let re: Regex = Regex::new(pattern).unwrap();
 
-    for line in lines {
-        for matches in re.captures_iter(&line) {
-            let l: i64 = matches[1].parse().unwrap();
-            let r: i64 = matches[2].parse().unwrap();
-            score += l * r;
-        }
-    }
+    for line in lines {}
 
     return score;
 }
 
 fn solve_p2(lines: Vec<String>) -> i64 {
     let mut score: i64 = 0;
-    let mut do_mul: bool = true;
-    let pattern: &str = r"mul\((\d{1,3}),(\d{1,3})\)|do\(\)|don't\(\)";
-    let re: Regex = Regex::new(pattern).unwrap();
 
-    for line in lines {
-        for matches in re.captures_iter(&line) {
-            if matches[0].to_string() == "do()" {
-                do_mul = true;
-            } else if matches[0].to_string() == "don't()" {
-                do_mul = false;
-            } else if do_mul {
-                let l: i64 = matches[1].parse().unwrap();
-                let r: i64 = matches[2].parse().unwrap();
-                score += l * r;
-            }
-        }
-    }
+    for line in lines {}
 
     return score;
 }
