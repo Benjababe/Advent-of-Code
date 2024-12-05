@@ -4,6 +4,7 @@ mod day_01;
 mod day_02;
 mod day_03;
 mod day_04;
+mod day_05;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -13,4 +14,5 @@ fn main() {
     day_02::solve(big_boy);
     day_03::solve(big_boy);
     day_04::solve(big_boy);
+    day_05::solve(big_boy);
 }

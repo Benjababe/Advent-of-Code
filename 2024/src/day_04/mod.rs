@@ -1,5 +1,5 @@
 use std::{
-    fs::File,
+    fs::{File, OpenOptions},
     io::{BufRead, BufReader},
     time::Instant,
 };
@@ -10,7 +10,14 @@ fn get_lines(big_boy: bool) -> Vec<String> {
     let filename: &str = if big_boy { "bigboy" } else { "input" };
     let input_file: String = format!("src/day_{DAY}/{filename}.txt");
 
-    let file: File = File::open(input_file).expect("Unable to open file");
+    OpenOptions::new()
+        .write(true)
+        .create(true)
+        .open(input_file.clone())
+        .expect("Unable to open file");
+
+    let file: File = File::open(input_file.clone()).expect("Unable to open file");
+
     let reader: BufReader<File> = BufReader::new(file);
     return reader
         .lines()
@@ -21,7 +28,7 @@ fn get_lines(big_boy: bool) -> Vec<String> {
 fn solve_p1(lines: Vec<String>) -> i64 {
     const PADDING: usize = 4;
     let mut score: i64 = 0;
-    let l: usize = lines[0].len();
+    let l: usize = if lines.len() > 0 { lines[0].len() } else { 0 };
 
     let offsets: Vec<((i64, i64), (i64, i64), (i64, i64))> = vec![
         ((0, -1), (0, -2), (0, -3)),
@@ -56,10 +63,13 @@ fn solve_p1(lines: Vec<String>) -> i64 {
                 continue;
             }
 
+            let y_i: i64 = y as i64;
+            let x_i: i64 = x as i64;
+
             for offset in offsets.iter() {
-                if lines_cl[y + offset.0 .0 as usize][x + offset.0 .1 as usize] == 'M'
-                    && lines_cl[y + offset.1 .0 as usize][x + offset.1 .1 as usize] == 'A'
-                    && lines_cl[y + offset.2 .0 as usize][x + offset.2 .1 as usize] == 'S'
+                if lines_cl[(y_i + offset.0 .0) as usize][(x_i + offset.0 .1) as usize] == 'M'
+                    && lines_cl[(y_i + offset.1 .0) as usize][(x_i + offset.1 .1) as usize] == 'A'
+                    && lines_cl[(y_i + offset.2 .0) as usize][(x_i + offset.2 .1) as usize] == 'S'
                 {
                     score += 1;
                 }
@@ -73,7 +83,7 @@ fn solve_p1(lines: Vec<String>) -> i64 {
 fn solve_p2(lines: Vec<String>) -> i64 {
     const PADDING: usize = 1;
     let mut score: i64 = 0;
-    let l: usize = lines[0].len();
+    let l: usize = if lines.len() > 0 { lines[0].len() } else { 0 };
 
     let mut lines_cl: Vec<Vec<char>> = lines
         .into_iter()
