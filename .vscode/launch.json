@@ -44,8 +44,17 @@
     {
       "type": "cppvsdbg",
       "request": "launch",
-      "name": "Rust: Debug 2024",
+      "name": "Rust: Windows Debug 2024",
       "program": "${workspaceFolder}/2024/target/debug/aoc.exe",
+      "cwd": "${workspaceFolder}/2024",
+      "args": [],
+      "preLaunchTask": "Cargo Debug Build 2024"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Rust: Unix Debug 2024",
+      "program": "${workspaceRoot}/2024/target/debug/aoc",
       "cwd": "${workspaceFolder}/2024",
       "args": [],
       "preLaunchTask": "Cargo Debug Build 2024"
