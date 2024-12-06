@@ -42,11 +42,12 @@
       "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe"
     },
     {
-      "type": "lldb",
+      "type": "cppvsdbg",
       "request": "launch",
       "name": "Rust: Debug 2024",
       "program": "${workspaceFolder}/2024/target/debug/aoc.exe",
       "cwd": "${workspaceFolder}/2024",
+      "args": [],
       "preLaunchTask": "Cargo Debug Build 2024"
     }
   ]

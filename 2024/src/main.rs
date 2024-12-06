@@ -10,12 +10,16 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let big_boy: bool = args.contains(&"--bigboy".to_string()) || args.contains(&"-bb".to_string());
 
-    let days: Vec<String> = args
+    let mut days: Vec<String> = args
         .iter()
         .position(|arg| arg == "--days" || arg == "-d")
         .and_then(|i| args.get(i + 1))
         .map(|s| s.split(',').map(String::from).collect())
         .unwrap_or_else(Vec::new);
+
+    if days.len() == 0 {
+        days.push(String::from("5"));
+    }
 
     for day in days {
         match day.as_str() {

@@ -18,7 +18,9 @@
       "options": {
         "cwd": "${fileDirname}"
       },
-      "problemMatcher": ["$gcc"],
+      "problemMatcher": [
+        "$gcc"
+      ],
       "group": {
         "kind": "build",
         "isDefault": false
@@ -43,7 +45,9 @@
       "options": {
         "cwd": "${fileDirname}"
       },
-      "problemMatcher": ["$gcc"],
+      "problemMatcher": [
+        "$gcc"
+      ],
       "group": {
         "kind": "build",
         "isDefault": false
@@ -57,7 +61,9 @@
         "kind": "build",
         "isDefault": true
       },
-      "problemMatcher": ["$rustc"],
+      "problemMatcher": [
+        "$rustc"
+      ],
       "detail": "Builds 2024 project using Cargo"
     },
     {
@@ -68,8 +74,14 @@
         "kind": "build",
         "isDefault": true
       },
-      "problemMatcher": ["$rustc"],
-      "detail": "Builds 2024 project using Cargo"
+      "problemMatcher": [
+        "$rustc"
+      ],
+      "detail": "Builds 2024 project using Cargo",
+      "args": [
+        "--profile",
+        "no_opt",
+      ]
     }
   ],
   "version": "2.0.0"
