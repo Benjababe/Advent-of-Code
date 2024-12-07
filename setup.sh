@@ -3,6 +3,8 @@
 year=$1
 day=$2
 
+day=$(echo $day | sed 's/^0*//')
+
 if [ $day -lt 10 ]; then
     day="0$day"
 fi
