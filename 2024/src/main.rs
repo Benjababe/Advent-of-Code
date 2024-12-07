@@ -11,6 +11,7 @@ mod day_07;
 fn main() {
     let args: Vec<String> = env::args().collect();
     let big_boy: bool = args.contains(&"--bigboy".to_string()) || args.contains(&"-bb".to_string());
+    let all: bool = args.contains(&"--all".to_string()) || args.contains(&"-a".to_string());
 
     let mut days: Vec<String> = args
         .iter()
@@ -22,6 +23,13 @@ fn main() {
     if days.len() == 0 {
         days.push(String::from("7"));
     }
+    if all {
+        for i in 1..26 {
+            days.push(i.to_string());
+        }
+    }
+    days.sort();
+    days.dedup();
 
     for day in days {
         match day.as_str() {
@@ -32,7 +40,7 @@ fn main() {
             "5" => day_05::solve(big_boy),
             "6" => day_06::solve(big_boy),
             "7" => day_07::solve(big_boy),
-            "" | _ => eprintln!("Please provide a valid day with (--days | -d) <num1,num2>"),
+            "" | _ => eprintln!("Please provide a valid day with `(--days | -d) <num1,num2>`. Invalid day {} provided", day),
         }
     }
 }
