@@ -22,7 +22,7 @@ fn get_lines(big_boy: bool) -> Vec<String> {
     let reader: BufReader<File> = BufReader::new(file);
     return reader
         .lines()
-        .map(|line| line.expect("Unable to read line"))
+        .map(|line| String::from(line.expect("Unable to read line").trim()))
         .collect();
 }
 
