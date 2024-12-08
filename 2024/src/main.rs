@@ -21,7 +21,7 @@ fn main() {
         .unwrap_or_else(Vec::new);
 
     if days.len() == 0 {
-        days.push(String::from("7"));
+        days.push(String::from("6"));
     }
     if all {
         for i in 1..26 {

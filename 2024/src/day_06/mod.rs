@@ -44,7 +44,7 @@ fn helper(
     init: (i64, i64),
     dir: usize,
     obstacle: (i64, i64),
-) -> (i64, bool) {
+) -> (i64, HashSet<(i64, i64)>, bool) {
     let mut pos: (i64, i64) = init.clone();
     let mut cur_dir: usize = dir;
     let mut visited: HashSet<(i64, i64)> = HashSet::new();
@@ -70,12 +70,35 @@ fn helper(
         }
     }
 
-    return (visited.len() as i64, in_loop);
+    return (visited.len() as i64, visited, in_loop);
+}
+
+fn get_obstacle_positions(
+    visited: HashSet<(i64, i64)>,
+    height: i64,
+    width: i64,
+) -> Vec<(i64, i64)> {
+    let mut obstacles: Vec<(i64, i64)> = Vec::new();
+
+    for y in 0..height {
+        for x in 0..width {
+            if visited.contains(&(x - 1, y))
+                || visited.contains(&(x + 1, y))
+                || visited.contains(&(x, y - 1))
+                || visited.contains(&(x, y + 1))
+            {
+                obstacles.push((x, y));
+            }
+        }
+    }
+
+    return obstacles;
 }
 
 fn solve_p(lines: Vec<String>, p2: bool) -> i64 {
     let mut score: i64 = 0;
     let mut init: (i64, i64) = (0, 0);
+    let dir: usize = 0;
     let mut grid: Vec<Vec<char>> = Vec::new();
 
     for (y, line) in lines.iter().enumerate() {
@@ -88,20 +111,20 @@ fn solve_p(lines: Vec<String>, p2: bool) -> i64 {
         grid.push(row);
     }
 
+    let (walked, tmp_visited, _) = helper(&grid, init, dir, (-1, -1));
     if !p2 {
-        let (walked, _): (i64, bool) = helper(&grid, init, 0, (-1, -1));
         return walked;
     }
 
-    let height: usize = grid.len();
-    let width: usize = grid[0].len();
+    let visited: HashSet<(i64, i64)> = tmp_visited;
+    let height: i64 = grid.len() as i64;
+    let width: i64 = grid[0].len() as i64;
+    let obstacles: Vec<(i64, i64)> = get_obstacle_positions(visited, height, width);
 
-    for y in 0..height {
-        for x in 0..width {
-            let (_, in_loop): (_, bool) = helper(&grid, init, 0, (x as i64, y as i64));
-            if in_loop {
-                score += 1;
-            }
+    for obstacle in obstacles {
+        let (_, _, in_loop) = helper(&grid, init, dir, obstacle);
+        if in_loop {
+            score += 1;
         }
     }
 
