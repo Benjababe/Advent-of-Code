@@ -1,5 +1,5 @@
-import subprocess
 import platform
+import subprocess
 
 
 def get_lines(filename: str):
@@ -7,7 +7,7 @@ def get_lines(filename: str):
 
     f = open(filename, "r")
     for line in f:
-        lines.append(line)
+        lines.append(line.strip())
 
     f.close()
     return lines
@@ -33,6 +33,8 @@ if __name__ == "__main__":
     elif platform.system() == "Darwin":
         subprocess.run("pbcopy", text=True, input=str(score))
     elif platform.system() == "Linux":
-        subprocess.run("xclip -selection clipboard", text=True, input=str(score), shell=True)
+        subprocess.run(
+            "xclip -selection clipboard", text=True, input=str(score), shell=True
+        )
 
     print(f"{score} copied to the clipboard")

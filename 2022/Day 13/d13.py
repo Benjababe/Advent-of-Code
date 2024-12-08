@@ -6,10 +6,12 @@ def get_lines(filename: str):
 
     f = open(filename, "r")
     for line in f:
-        lines.append(line)
+        lines.append(line.strip())
 
     f.close()
     return lines
+
+
 # end_get_lines
 
 
@@ -49,6 +51,8 @@ def check_packets(l: list, r: list):
         return True
     else:
         return None
+
+
 # end_check_packets
 
 
@@ -60,6 +64,8 @@ def cmp_first_num(l, r) -> int:
         r = r[0] if len(r) > 0 else -1
 
     return -1 if l < r else 1
+
+
 # end_cmp_first_num
 
 
@@ -69,7 +75,7 @@ def parse_packets(lines: list[str]):
 
     for i in range(0, len(lines), 3):
         l = eval(lines[i].strip())
-        r = eval(lines[i+1].strip())
+        r = eval(lines[i + 1].strip())
         packets.append(l)
         packets.append(r)
 
@@ -84,6 +90,8 @@ def parse_packets(lines: list[str]):
 
     print(f"Pt 1: {score}")
     print(f"Pt 2: {i2 * i6}")
+
+
 # end_parse_packets
 
 

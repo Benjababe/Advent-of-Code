@@ -8,7 +8,7 @@ def get_lines(filename: str):
 
     f = open(filename, "r")
     for line in f:
-        lines.append(line)
+        lines.append(line.strip())
 
     f.close()
     return lines

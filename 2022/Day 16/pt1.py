@@ -11,10 +11,12 @@ def get_lines(filename: str):
 
     f = open(filename, "r")
     for line in f:
-        lines.append(line)
+        lines.append(line.strip())
 
     f.close()
     return lines
+
+
 # end_get_lines
 
 
@@ -27,7 +29,7 @@ def get_dist(d_valves: dict, source: str, dest: str) -> dict:
         visited.append(path[-1])
 
         if path[-1] == dest:
-            return {"path": path[1:], "dist": len(path)-1}
+            return {"path": path[1:], "dist": len(path) - 1}
 
         neighbours = d_valves[path[-1]]["neighbours"]
 
@@ -104,7 +106,7 @@ def traverse(valves: dict, path: list[str], p_sum: int, time: int) -> int:
             else:
                 tmp_path = i_path.copy() + [n]
                 dist = v["neighbours"][n]["dist"]
-                traverse(tmp_valves, tmp_path, tmp_sum, time-dist)
+                traverse(tmp_valves, tmp_path, tmp_sum, time - dist)
 
     if 0 in options:
         tmp_valves = copy.deepcopy(valves)
@@ -115,7 +117,7 @@ def traverse(valves: dict, path: list[str], p_sum: int, time: int) -> int:
                 tmp_path = path.copy() + [n]
                 tmp_valves = copy.deepcopy(valves)
                 dist = v["neighbours"][n]["dist"]
-                traverse(tmp_valves, tmp_path, p_sum, time-dist)
+                traverse(tmp_valves, tmp_path, p_sum, time - dist)
 
     return 0
 
@@ -139,24 +141,19 @@ def get_score(lines: list[str]) -> int:
         dirty_valves[valve] = {
             "turned": False,
             "flow_rate": int(flow_rate),
-            "neighbours": tunnels
+            "neighbours": tunnels,
         }
 
         if int(flow_rate) > 0:
-            good_valves[valve] = {
-                "turned": False,
-                "flow_rate": int(flow_rate)
-            }
+            good_valves[valve] = {"turned": False, "flow_rate": int(flow_rate)}
 
         if valve == "AA":
-            good_valves["AA"] = {
-                "turned": True,
-                "flow_rate": int(flow_rate)
-            }
+            good_valves["AA"] = {"turned": True, "flow_rate": int(flow_rate)}
 
     for v in good_valves:
         good_valves[v]["neighbours"] = dict(
-            [(i, {}) for i in good_valves if i != v and i != "AA"])
+            [(i, {}) for i in good_valves if i != v and i != "AA"]
+        )
 
     clean_valves(dirty_valves, good_valves)
 
@@ -164,6 +161,8 @@ def get_score(lines: list[str]) -> int:
     score = traverse(good_valves, path, 0, 30)
 
     return score
+
+
 # end_get_score
 
 

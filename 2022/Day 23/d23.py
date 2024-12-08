@@ -21,29 +21,59 @@ def get_lines(filename: str):
 
     f = open(filename, "r")
     for line in f:
-        lines.append(line)
+        lines.append(line.strip())
 
     f.close()
     return lines
+
+
 # end_get_lines
 
 
 def elf_decision(grid, x, y) -> str:
-    if grid[y][x+1] == '.' and grid[y][x-1] == '.' and grid[y+1][x] == '.' and grid[y-1][x] == '.'\
-            and grid[y-1][x+1] == '.' and grid[y-1][x-1] == '.' and grid[y+1][x+1] == '.' and grid[y+1][x-1] == '.':
+    if (
+        grid[y][x + 1] == "."
+        and grid[y][x - 1] == "."
+        and grid[y + 1][x] == "."
+        and grid[y - 1][x] == "."
+        and grid[y - 1][x + 1] == "."
+        and grid[y - 1][x - 1] == "."
+        and grid[y + 1][x + 1] == "."
+        and grid[y + 1][x - 1] == "."
+    ):
         return ""
 
     for d in grid[y][x].choices:
-        if d == "N" and grid[y-1][x] == '.' and grid[y-1][x-1] == '.' and grid[y-1][x+1] == '.':
+        if (
+            d == "N"
+            and grid[y - 1][x] == "."
+            and grid[y - 1][x - 1] == "."
+            and grid[y - 1][x + 1] == "."
+        ):
             return "N"
 
-        if d == "S" and grid[y+1][x] == '.' and grid[y+1][x-1] == '.' and grid[y+1][x+1] == '.':
+        if (
+            d == "S"
+            and grid[y + 1][x] == "."
+            and grid[y + 1][x - 1] == "."
+            and grid[y + 1][x + 1] == "."
+        ):
             return "S"
 
-        if d == "W" and grid[y][x-1] == '.' and grid[y-1][x-1] == '.' and grid[y+1][x-1] == '.':
+        if (
+            d == "W"
+            and grid[y][x - 1] == "."
+            and grid[y - 1][x - 1] == "."
+            and grid[y + 1][x - 1] == "."
+        ):
             return "W"
 
-        if d == "E" and grid[y][x+1] == '.' and grid[y-1][x+1] == '.' and grid[y+1][x+1] == '.':
+        if (
+            d == "E"
+            and grid[y][x + 1] == "."
+            and grid[y - 1][x + 1] == "."
+            and grid[y + 1][x + 1] == "."
+        ):
             return "E"
 
     return ""
@@ -60,7 +90,7 @@ def simulate_elves(lines: list[str]) -> tuple[int, int]:
 
     for line in lines:
         line = f".{line.strip()}."
-        grid.append([c if c == '.' else Elf() for c in f"{line.strip()}"])
+        grid.append([c if c == "." else Elf() for c in f"{line.strip()}"])
 
     while True:
         loop_count += 1
@@ -77,13 +107,13 @@ def simulate_elves(lines: list[str]) -> tuple[int, int]:
                     grid[y][x].cycle_decision()
 
                     if decision == "N":
-                        proposals[(x, y-1)].append((x, y))
+                        proposals[(x, y - 1)].append((x, y))
                     elif decision == "S":
-                        proposals[(x, y+1)].append((x, y))
+                        proposals[(x, y + 1)].append((x, y))
                     elif decision == "W":
-                        proposals[(x-1, y)].append((x, y))
+                        proposals[(x - 1, y)].append((x, y))
                     elif decision == "E":
-                        proposals[(x+1, y)].append((x, y))
+                        proposals[(x + 1, y)].append((x, y))
 
         # elves have stopped moving
         if len(proposals) == 0:
@@ -95,20 +125,20 @@ def simulate_elves(lines: list[str]) -> tuple[int, int]:
                 o_x, o_y = proposals[new_coord][0]
                 n_x, n_y = new_coord
                 grid[n_y][n_x] = grid[o_y][o_x]
-                grid[o_y][o_x] = '.'
+                grid[o_y][o_x] = "."
 
         # pad out grid
         if any(isinstance(c, Elf) for c in grid[0]):
-            grid.insert(0, ['.' for _ in range(len(grid[0]))])
+            grid.insert(0, ["." for _ in range(len(grid[0]))])
         if any(isinstance(c, Elf) for c in grid[-1]):
-            grid.append(['.' for _ in range(len(grid[0]))])
+            grid.append(["." for _ in range(len(grid[0]))])
 
         if any(isinstance(grid[y][0], Elf) for y in range(len(grid))):
             for y in range(len(grid)):
-                grid[y].insert(0, '.')
+                grid[y].insert(0, ".")
         if any(isinstance(grid[y][-1], Elf) for y in range(len(grid))):
             for y in range(len(grid)):
-                grid[y].append('.')
+                grid[y].append(".")
 
         if loop_count == 10:
             grid_10 = deepcopy(grid)
@@ -130,10 +160,12 @@ def simulate_elves(lines: list[str]) -> tuple[int, int]:
                     y1 = y
                 elf_count += 1
 
-    board_size = (x1-x0+1) * (y1-y0+1)
+    board_size = (x1 - x0 + 1) * (y1 - y0 + 1)
     ground_tiles = board_size - elf_count
 
     return (ground_tiles, loop_count)
+
+
 # end_get_score
 
 
