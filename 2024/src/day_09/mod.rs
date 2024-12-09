@@ -31,16 +31,13 @@ fn solve_p1(lines: Vec<String>) -> i64 {
     let mut fid: i64 = 0;
     let mut is_file: bool = true;
     let line: String = lines.get(0).expect("No lines found").to_string();
+    let line_vec: Vec<u32> = line
+        .chars()
+        .map(|c| c.to_digit(10).expect("Unable to parse digit"))
+        .collect();
 
     for i in 0..line.len() {
-        let d: u32 = line
-            .chars()
-            .nth(i)
-            .unwrap()
-            .to_digit(10)
-            .expect("Unable to parse digit");
-
-        for _ in 0..d {
+        for _ in 0..line_vec[i] {
             fs.push(if is_file { fid } else { -1 });
         }
 
@@ -86,14 +83,13 @@ fn solve_p2(lines: Vec<String>) -> i64 {
     let mut is_file: bool = true;
     let mut fid: i64 = 0;
     let line: String = lines.get(0).expect("No lines found").to_string();
+    let line_vec: Vec<u32> = line
+        .chars()
+        .map(|c| c.to_digit(10).expect("Unable to parse digit"))
+        .collect();
 
     for i in 0..line.len() {
-        let l: u32 = line
-            .chars()
-            .nth(i)
-            .unwrap()
-            .to_digit(10)
-            .expect("Unable to parse digit");
+        let l: u32 = line_vec[i];
 
         if l > 0 {
             fs.push(FileBlock {
