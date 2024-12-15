@@ -73,4 +73,4 @@ if __name__ == "__main__":
     print(f"Day 13 Part 1: {score}")
 
     score = get_score(lines, True)
-    print(f"Day 13 Part 1: {score}")
+    print(f"Day 13 Part 2: {score}")

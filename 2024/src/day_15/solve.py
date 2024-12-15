@@ -1,9 +1,3 @@
-import platform
-import subprocess
-
-move_map = {"<": (-1, 0), ">": (1, 0), "^": (0, -1), "v": (0, 1)}
-
-
 def get_lines(filename: str):
     lines = []
 
@@ -21,7 +15,7 @@ def push(grid: list[list[str]], x: int, y: int, dx: int, dy: int, act: bool):
     if grid[y][x] == "." or grid[y][x] == " ":
         return True
 
-    # if robot or moving l->r, try to push
+    # if robot or moving box l->r, try to push by 1 space
     if dx != 0 or grid[y][x] == "@" or grid[y][x] == "O":
         p = push(grid, x + dx, y + dy, dx, dy, act)
         if grid[y + dy][x + dx] == ".":
@@ -31,11 +25,12 @@ def push(grid: list[list[str]], x: int, y: int, dx: int, dy: int, act: bool):
             return True
         return p
 
-    # if left box
+    # if left box and moving vertically, push up/down and the space to the right
     elif grid[y][x] == "[":
         p = push(grid, x + dx, y + dy, dx, dy, act)
         q = push(grid, x + dx + 1, y + dy, dx, dy, act)
 
+        # if wide box can be pushed, push it on actual run
         if grid[y + dy][x + dx] == "." and grid[y + dy][x + dx + 1] == ".":
             if act:
                 grid[y + dy][x + dx] = "["
@@ -45,11 +40,12 @@ def push(grid: list[list[str]], x: int, y: int, dx: int, dy: int, act: bool):
             return True
         return p and q
 
-    # if right box
+    # if right box and moving vertically, push up/down and space to the left
     elif grid[y][x] == "]":
         p = push(grid, x + dx - 1, y + dy, dx, dy, act)
         q = push(grid, x + dx, y + dy, dx, dy, act)
 
+        # if wide box can be pushed, push it on actual run
         if grid[y + dy][x + dx - 1] == "." and grid[y + dy][x + dx] == ".":
             if act:
                 grid[y + dy][x + dx - 1] = "["
@@ -62,24 +58,29 @@ def push(grid: list[list[str]], x: int, y: int, dx: int, dy: int, act: bool):
     return False
 
 
-def get_score(lines: list[str]) -> int:
+def get_score(lines: list[str], p2: bool) -> int:
     score = 0
     l = "".join(lines)
 
-    l = l.replace("#", "##").replace("O", "[]").replace(".", "..").replace("@", "@.")
+    if p2:
+        l = (
+            l.replace("#", "##")
+            .replace("O", "[]")
+            .replace(".", "..")
+            .replace("@", "@.")
+        )
 
-    segs = l.split("\n\n")
+    segments = l.split("\n\n")
+    grid = [[c for c in l.strip()] for l in segments[0].split("\n")]
 
-    grid = [[c for c in l.strip()] for l in segs[0].split("\n")]
     x, y = 1, 1
-
     for ty in range(len(grid)):
         for tx in range(len(grid[ty])):
             if grid[ty][tx] == "@":
                 x, y = tx, ty
 
-    inst = segs[1].replace("\n", "")
-
+    inst = segments[1].replace("\n", "")
+    move_map = {"<": (-1, 0), ">": (1, 0), "^": (0, -1), "v": (0, 1)}
     for direc in inst:
         dx, dy = move_map[direc]
         p = push(grid, x, y, dx, dy, False)
@@ -98,17 +99,9 @@ def get_score(lines: list[str]) -> int:
 
 if __name__ == "__main__":
     lines = get_lines("input.txt")
-    score = get_score(lines)
 
-    print(f"Score: {score}")
+    score = get_score(lines, False)
+    print(f"Day 15 Part 1: {score}")
 
-    if platform.system() == "Windows":
-        subprocess.run("clip", text=True, input=str(score))
-    elif platform.system() == "Darwin":
-        subprocess.run("pbcopy", text=True, input=str(score))
-    elif platform.system() == "Linux":
-        subprocess.run(
-            "xclip -selection clipboard", text=True, input=str(score), shell=True
-        )
-
-    print(f"{score} copied to the clipboard")
+    score = get_score(lines, True)
+    print(f"Day 15 Part 2: {score}")
