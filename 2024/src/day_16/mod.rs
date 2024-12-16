@@ -1,9 +1,12 @@
 use std::{
+    cmp::Reverse,
     collections::HashSet,
     fs::{File, OpenOptions},
     io::{BufRead, BufReader},
     time::Instant,
 };
+
+use priority_queue::PriorityQueue;
 
 const DAY: &str = "16";
 
@@ -45,10 +48,12 @@ fn solve_p(lines: Vec<String>, p2: bool) -> i64 {
         grid.push(row);
     }
 
-    let mut queue: Vec<(i64, i64, i64, i64, Vec<(i64, i64)>)> = vec![(0, 0, x, y, vec![])];
+    let mut p_queue: PriorityQueue<(i64, i64, i64, Vec<(i64, i64)>), Reverse<i64>> =
+        PriorityQueue::new();
+    p_queue.push((0, x, y, vec![]), Reverse(0));
 
-    while queue.len() > 0 {
-        let (points, dir, x, y, path) = queue.remove(0);
+    while p_queue.len() > 0 {
+        let ((dir, x, y, path), points) = p_queue.pop().unwrap();
 
         if grid[y as usize][x as usize] == 'E' {
             if p2 {
@@ -56,8 +61,11 @@ fn solve_p(lines: Vec<String>, p2: bool) -> i64 {
                     best_spots.insert((px, py));
                 }
 
-                while queue.len() > 0 && queue[0].0 == points {
-                    let (_, _, tx, ty, t_path) = queue.remove(0);
+                while p_queue.len() > 0 {
+                    let ((_, tx, ty, t_path), t_points) = p_queue.pop().unwrap();
+                    if points.0 != t_points.0 {
+                        break;
+                    }
                     if tx != x || ty != y {
                         continue;
                     }
@@ -69,7 +77,7 @@ fn solve_p(lines: Vec<String>, p2: bool) -> i64 {
 
                 return (best_spots.len() as i64) + 1;
             } else {
-                return points;
+                return points.0;
             }
         }
 
@@ -78,7 +86,7 @@ fn solve_p(lines: Vec<String>, p2: bool) -> i64 {
             if tmp_dir < 0 {
                 tmp_dir += 4;
             }
-            let tmp_points: i64 = rot.abs() * 1000 + points + 1;
+            let tmp_points: i64 = rot.abs() * 1000 + points.0 + 1;
             let (dx, dy) = OFFSETS[tmp_dir as usize];
 
             if grid[(y + dy) as usize][(x + dx) as usize] != '#'
@@ -86,12 +94,11 @@ fn solve_p(lines: Vec<String>, p2: bool) -> i64 {
             {
                 let mut new_path: Vec<(i64, i64)> = path.clone();
                 new_path.push((x, y));
-                queue.push((tmp_points, tmp_dir, x + dx, y + dy, new_path));
+                p_queue.push((tmp_dir, x + dx, y + dy, new_path), Reverse(tmp_points));
             }
         }
 
         visited.insert((dir, x, y));
-        queue.sort_by(|a, b| a.0.cmp(&b.0));
     }
 
     return 0;
