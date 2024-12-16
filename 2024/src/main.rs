@@ -13,6 +13,7 @@ mod day_10;
 mod day_11;
 mod day_12;
 mod day_14;
+mod day_16;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -27,10 +28,13 @@ fn main() {
         .unwrap_or_else(Vec::new);
 
     if days.len() == 0 {
-        days.push(String::from("14"));
+        days.push(String::from("16"));
     }
     if all {
         for i in 1..26 {
+            if vec![13, 15].contains(&i) {
+                continue;
+            }
             days.push(i.to_string());
         }
     }
@@ -52,6 +56,7 @@ fn main() {
             "11" => day_11::solve(big_boy),
             "12" => day_12::solve(big_boy),
             "14" => day_14::solve(big_boy),
+            "16" => day_16::solve(big_boy),
             "" | _ => eprintln!("Please provide a valid day with `(--days | -d) <num1,num2>`. Invalid day {} provided", day),
         }
     }
