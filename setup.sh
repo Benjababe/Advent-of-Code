@@ -3,9 +3,8 @@
 year=$1
 day=$2
 
-day=$(echo $day | sed 's/^0*//')
-
-if [ $day -lt 10 ]; then
+day=${day#0}
+if [ "$day" -lt 10 ]; then
     day="0$day"
 fi
 
@@ -17,4 +16,9 @@ touch "$path/input.txt"
 cp boilerplates/boilerplate.py "$path/test.py"
 cp boilerplates/boilerplate.rs "$path/mod.rs"
 
-sed -i '' -e "s/_DAY_/$day/g" "$path/mod.rs"
+# Use sed for in-place editing with compatibility for both Linux and macOS
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' -e "s/_DAY_/$day/g" "$path/mod.rs"
+else
+    sed -i -e "s/_DAY_/$day/g" "$path/mod.rs"
+fi

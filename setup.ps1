@@ -4,7 +4,7 @@ param (
 )
 
 $day = [string][int]$day
-$day = $day | % PadLeft 2 '0'
+$day = $day | ForEach-Object PadLeft 2 '0'
 
 $path = "$year\src\day_$day"
 
