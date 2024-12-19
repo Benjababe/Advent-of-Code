@@ -27,7 +27,7 @@ fn get_lines(big_boy: bool) -> Vec<String> {
 }
 
 fn check_possible(
-    memoi: &mut HashMap<(String, String), i64>,
+    memoi: &mut HashMap<String, i64>,
     designs: &Vec<String>,
     pattern: String,
     p2: bool,
@@ -35,25 +35,21 @@ fn check_possible(
     if pattern.is_empty() {
         return 1;
     }
+    if memoi.contains_key(&pattern) {
+        return *memoi.get(&pattern).unwrap();
+    }
 
     let mut possibles: i64 = 0;
 
     for design in designs {
         if pattern.starts_with(design) {
-            let k: (String, String) = (pattern.to_string(), design.clone());
-
-            if memoi.contains_key(&k) {
-                possibles += memoi.get(&k).unwrap();
-            } else {
-                let tmp_pattern: String = pattern[design.len()..].to_string();
-                let p: i64 = check_possible(memoi, designs, tmp_pattern, p2);
-                possibles += p;
-
-                memoi.insert(k, p);
-            }
+            let tmp_pattern: String = pattern[design.len()..].to_string();
+            let p: i64 = check_possible(memoi, designs, tmp_pattern, p2);
+            possibles += p;
         }
     }
 
+    memoi.insert(pattern.to_string(), possibles);
     return if p2 { possibles } else { possibles.min(1) };
 }
 
@@ -61,7 +57,7 @@ fn solve_p(lines: Vec<String>, p2: bool) -> i64 {
     let mut score: i64 = 0;
     let mut loop_patterns: bool = false;
     let mut designs: Vec<String> = Vec::new();
-    let mut memoi: HashMap<(String, String), i64> = HashMap::new();
+    let mut memoi: HashMap<String, i64> = HashMap::new();
 
     for line in lines {
         if line == "" {
