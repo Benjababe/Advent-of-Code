@@ -1,5 +1,3 @@
-import platform
-import subprocess
 import re
 
 
@@ -14,9 +12,9 @@ def get_lines(filename: str):
     return lines
 
 
-def get_score(lines: list[str]) -> int:
+def get_score(lines: list[str], repeat_count: str) -> int:
     score = 0
-    pattern = re.compile(r'^(.+)\1+$')
+    pattern = re.compile(rf"^(.+)\1{repeat_count}$")
 
     for line in lines:
         pairs = line.split(",")
@@ -34,17 +32,8 @@ def get_score(lines: list[str]) -> int:
 
 if __name__ == "__main__":
     lines = get_lines("input.txt")
-    score = get_score(lines)
 
-    print(f"Score: {score}")
-
-    if platform.system() == "Windows":
-        subprocess.run("clip", text=True, input=str(score))
-    elif platform.system() == "Darwin":
-        subprocess.run("pbcopy", text=True, input=str(score))
-    elif platform.system() == "Linux":
-        subprocess.run(
-            "xclip -selection clipboard", text=True, input=str(score), shell=True
-        )
-
-    print(f"{score} copied to the clipboard")
+    score_pt1 = get_score(lines, "{1}")
+    print(f"Pt1 Score: {score_pt1}")
+    score_pt2 = get_score(lines, "+")
+    print(f"Pt2 Score: {score_pt2}")
