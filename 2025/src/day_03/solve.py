@@ -1,6 +1,3 @@
-import platform
-import subprocess
-
 
 def get_lines(filename: str):
     lines = []
@@ -53,14 +50,3 @@ if __name__ == "__main__":
     print(f"Pt1 Score: {score_pt1}")
     score_pt2 = get_score_pt2(lines)
     print(f"Pt2 Score: {score_pt2}")
-
-    if platform.system() == "Windows":
-        subprocess.run("clip", text=True, input=str(score_pt2))
-    elif platform.system() == "Darwin":
-        subprocess.run("pbcopy", text=True, input=str(score_pt2))
-    elif platform.system() == "Linux":
-        subprocess.run(
-            "xclip -selection clipboard", text=True, input=str(score_pt2), shell=True
-        )
-
-    print(f"{score_pt2} copied to the clipboard")
