@@ -22,39 +22,36 @@ def get_lines(filename: str):
     return lines
 
 
-def get_score(lines: list[str], recurse: bool) -> int:
+def get_score(lines: list[str], repeat: bool) -> int:
     grid = [[c for c in l] for l in lines]
-    score = process_grid(grid, recurse)
-    return score
-
-
-def process_grid(grid: list[list[str]], recurse: bool) -> int:
-    score = 0
-    copy_grid = [[c for c in l] for l in grid]
     to_remove: list[tuple[int, int]] = []
+    score = 0
 
-    for y in range(len(grid)):
-        line = grid[y]
-        for x in range(len(line)):
-            if grid[y][x] != "@":
-                continue
+    while True:
+        iter_score = 0
+        for y in range(len(grid)):
+            line = grid[y]
+            for x in range(len(line)):
+                if grid[y][x] != "@":
+                    continue
 
-            count = 0
-            for dx, dy in neighbours:
-                nx, ny = x+dx, y+dy
-                if nx >= 0 and nx < len(grid[0]) and ny >= 0 and ny < len(grid):
-                    if grid[ny][nx] == "@":
-                        count += 1
+                count = 0
+                for dx, dy in neighbours:
+                    nx, ny = x+dx, y+dy
+                    if nx >= 0 and nx < len(grid[0]) and ny >= 0 and ny < len(grid):
+                        if grid[ny][nx] == "@":
+                            count += 1
 
-            if count < 4:
-                score += 1
-                to_remove.append((x, y))
-                copy_grid[y][x] = "X"
+                if count < 4:
+                    iter_score += 1
+                    to_remove.append((x, y))
 
-    if recurse and score > 0:
-        for x, y in to_remove:
-            grid[y][x] = "."
-        score += process_grid(grid, recurse)
+        score += iter_score
+        if repeat and iter_score > 0:
+            for x, y in to_remove:
+                grid[y][x] = "."
+            continue
+        break
 
     return score
 
