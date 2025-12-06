@@ -13,12 +13,11 @@ path="$year/src/day_$day"
 mkdir -p "$path"
 touch "$path/input.txt"
 
-cp boilerplates/boilerplate.py "$path/test.py"
-cp boilerplates/boilerplate.rs "$path/mod.rs"
+cp boilerplates/boilerplate.py "$path/solve.py"
 
 # Use sed for in-place editing with compatibility for both Linux and macOS
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    sed -i '' -e "s/_DAY_/$day/g" "$path/mod.rs"
-else
-    sed -i -e "s/_DAY_/$day/g" "$path/mod.rs"
-fi
+# if [[ "$OSTYPE" == "darwin"* ]]; then
+#     sed -i '' -e "s/_DAY_/$day/g" "$path/mod.rs"
+# else
+#     sed -i -e "s/_DAY_/$day/g" "$path/mod.rs"
+# fi
