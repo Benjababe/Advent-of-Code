@@ -8,7 +8,7 @@ if [ "$day" -lt 10 ]; then
     day="0$day"
 fi
 
-path="$year/src/day_$day"
+path="$year/day_$day"
 
 mkdir -p "$path"
 touch "$path/input.txt"
