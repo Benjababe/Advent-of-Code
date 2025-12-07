@@ -1,6 +1,7 @@
+import functools
 import time
 
-memoi: dict[tuple[int, int], int] = {}
+grid: list[list[str]] = []
 
 
 def format_time(sec: float) -> str:
@@ -24,8 +25,9 @@ def get_lines(filename: str):
 
 
 def get_score(lines: list[str], pt2: bool) -> int:
-    score = 0
+    global grid
     grid = [[c for c in line] for line in lines]
+    score = 0
 
     if not pt2:
         for y, row in enumerate(grid[:-1]):
@@ -44,7 +46,7 @@ def get_score(lines: list[str], pt2: bool) -> int:
 
     else:
         first_split = get_first_split(grid)
-        score += spl(grid, first_split[0], first_split[1]) + 1
+        score += spl(first_split[0], first_split[1]) + 1
 
     return score
 
@@ -59,22 +61,21 @@ def get_first_split(grid: list[list[str]]) -> tuple[int, int]:
     return (0, 0)
 
 
-def spl(grid: list[list[str]], x: int, y: int) -> int:
-    score, key = 1, (x, y)
-    if key in memoi:
-        return memoi[key]
+@functools.cache
+def spl(x: int, y: int) -> int:
+    global grid
+    score = 1
 
     lx, rx = x - 1, x + 1
     l_done, r_done = False, False
     for ny in range(y + 1, len(grid)):
         if grid[ny][lx] == "^" and not l_done:
-            score += spl(grid, lx, ny)
+            score += spl(lx, ny)
             l_done = True
         if grid[ny][rx] == "^" and not r_done:
-            score += spl(grid, rx, ny)
+            score += spl(rx, ny)
             r_done = True
 
-    memoi[key] = score
     return score
 
 
