@@ -1,7 +1,4 @@
-import platform
-import subprocess
 import time
-import sys
 import math
 
 
@@ -32,42 +29,39 @@ def get_score(lines: list[str], pt2: bool) -> int:
         chars = line.split(",")
         boxes.append((int(chars[0]), int(chars[1]), int(chars[2])))
 
-    boxes_with_dist: list[tuple[float, tuple[int, int, int], tuple[int, int, int]]] = []
+    boxes_with_dist: list[tuple[float, int, int]] = []
     for i, box in enumerate(boxes):
         for j, nbox in enumerate(boxes):
             if i == j:
                 continue
-            dist = math.dist(box, nbox)
-            boxes_with_dist.append((dist, min(box, nbox), max(box, nbox)))
+            e_dist = math.dist(box, nbox)
+            boxes_with_dist.append((e_dist, min(i, j), max(i, j)))
 
     boxes_with_dist = list(set(boxes_with_dist))
     boxes_with_dist.sort(key=lambda b: b[0])
 
-    conn_count = 0
-    circuits: list[list[tuple[int, int, int]]] = [[box] for box in boxes]
-    for i, (dist, box, nbox) in enumerate(boxes_with_dist):
-        if conn_count == 1000 and not pt2:
-            circuits.sort(key=lambda c: len(c), reverse=True)
-            score = len(circuits[0]) * len(circuits[1]) * len(circuits[2])
-            return score
-
-        i1, i2 = find_circuit_index(circuits, box), find_circuit_index(circuits, nbox)
+    circuits: list[set[int]] = [set([i]) for i in range(len(boxes))]
+    for _, bi, bj in (boxes_with_dist if pt2 else boxes_with_dist[:1000]):
+        i1, i2 = find_circuit_index(circuits, bi), find_circuit_index(circuits, bj)
         if i1 != i2:
-            circuits[i1].extend(circuits[i2])
-            circuits[i2] = []
-        circuits = [c for c in circuits if len(c) > 0]
-        conn_count += 1
+            circuits[i1] = circuits[i1].union(circuits[i2])
+            del circuits[i2]
 
-        if len(circuits) == 1 and pt2:
-            score = box[0] * nbox[0]
+        if pt2 and len(circuits) == 1:
+            score = boxes[bi][0] * boxes[bj][0]
             return score
+
+    if not pt2:
+        circuits.sort(key=lambda c: len(c), reverse=True)
+        score = len(circuits[0]) * len(circuits[1]) * len(circuits[2])
+        return score
 
     return score
 
 
-def find_circuit_index(circuits: list[list[tuple[int, int, int]]], box: tuple[int, int, int]) -> int:
+def find_circuit_index(circuits: list[set[int]], box_i: int) -> int:
     for i in range(len(circuits)):
-        if box in circuits[i]:
+        if box_i in circuits[i]:
             return i
     return -1
 
