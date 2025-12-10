@@ -1,8 +1,5 @@
 import time
-
-import itertools
 from collections import defaultdict
-
 from pulp import LpProblem, LpVariable, LpInteger, value, PULP_CBC_CMD
 
 
@@ -102,7 +99,7 @@ if __name__ == "__main__":
     t2 = time.perf_counter()
     print(f"Score Pt1: {score_pt1}\tTime taken: {format_time(t2-t1)}")
 
-    # t1 = time.perf_counter()
-    # score_pt2 = get_score(lines, True)
-    # t2 = time.perf_counter()
-    # print(f"Score Pt2: {score_pt2}\tTime taken: {format_time(t2-t1)}")
+    t1 = time.perf_counter()
+    score_pt2 = get_score(lines, True)
+    t2 = time.perf_counter()
+    print(f"Score Pt2: {score_pt2}\tTime taken: {format_time(t2-t1)}")
