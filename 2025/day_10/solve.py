@@ -1,6 +1,6 @@
 import time
 from collections import defaultdict
-from pulp import LpProblem, LpVariable, LpInteger, value, PULP_CBC_CMD
+import pulp as pl
 
 
 def format_time(sec: float) -> str:
@@ -53,33 +53,23 @@ def get_score(lines: list[str], pt2: bool) -> int:
     else:
         for line in lines:
             spl = line.split()
-            target_joltage = [int(c) for c in spl[-1][1:-1].split(",")]
+            target_joltages = [int(c) for c in spl[-1][1:-1].split(",")]
             buttons = [[int(v) for v in btn[1:-1].split(",")] for btn in spl[1:-1]]
 
-            lp_vars = []
-            for i in range(len(buttons)):
-                v = LpVariable(chr(ord('a') + i), lowBound=0, cat=LpInteger)
-                lp_vars.append(v)
+            vars = [pl.LpVariable(chr(ord('a') + i), lowBound=0, cat=pl.LpInteger) for i in range(len(buttons))]
 
-            prob = LpProblem("MinSumOfCoefficients")
-            for i in range(len(target_joltage)):
-                eq = 0
-                for j, btn in enumerate(buttons):
-                    if i not in btn:
-                        continue
-                    eq += lp_vars[j] * 1
-                prob += eq == target_joltage[i]
+            prob = pl.LpProblem("MinSumOfCoefficients")
 
             # Include this to specify to solve for minimum sum of coefficients (Very impt!!)
-            eq = 0
-            for lp_var in lp_vars:
-                eq += lp_var
-            prob += eq
+            prob += pl.lpSum(vars)
+
+            for i, target_val in enumerate(target_joltages):
+                prob += pl.lpSum([vars[j] for j in range(len(buttons)) if i in buttons[j]]) == target_val
 
             # By the powers of linear algebra I summon thee
-            prob.solve(solver=PULP_CBC_CMD(msg=False))
-            for i, lp_var in enumerate(lp_vars):
-                score += int(value(lp_var))
+            prob.solve(solver=pl.PULP_CBC_CMD(msg=False))
+            for i, lp_var in enumerate(vars):
+                score += int(pl.value(lp_var))  # type: ignore
 
     return score
 
