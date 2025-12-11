@@ -70,6 +70,13 @@ fn solve_p(lines: Vec<String>, p2: bool) -> i64 {
         }
 
         if no_overlap && p2 {
+            for y in 0..height {
+                for x in 0..width {
+                    print!("{}", if seen.contains(&(x, y)) { '#' } else { '.' })
+                }
+                println!();
+            }
+
             return i;
         }
     }
