@@ -6,24 +6,7 @@ use std::{
 
 const DAY: &str = "_DAY_";
 
-fn get_lines(big_boy: bool) -> Vec<String> {
-    let filename: &str = if big_boy { "bigboy" } else { "input" };
-    let input_file: String = format!("src/day_{DAY}/{filename}.txt");
 
-    OpenOptions::new()
-        .write(true)
-        .create(true)
-        .open(input_file.clone())
-        .expect("Unable to open file");
-
-    let file: File = File::open(input_file.clone()).expect("Unable to open file");
-
-    let reader: BufReader<File> = BufReader::new(file);
-    return reader
-        .lines()
-        .map(|line| String::from(line.expect("Unable to read line").trim()))
-        .collect();
-}
 
 fn solve_p1(lines: Vec<String>) -> i64 {
     let mut score: i64 = 0;

@@ -1,5 +1,7 @@
 use std::env;
 
+pub mod helper;
+
 mod day_01;
 mod day_02;
 mod day_03;
@@ -31,18 +33,17 @@ fn main() {
         .map(|s| s.split(',').map(String::from).collect())
         .unwrap_or_else(Vec::new);
 
-    if days.len() == 0 {
-        days.push(String::from("25"));
-    }
     if all {
         for i in 1..26 {
-            if vec![13, 15, 17].contains(&i) {
+            if vec![13, 15, 17, 20, 21, 23, 24].contains(&i) {
                 continue;
             }
             days.push(i.to_string());
         }
     }
-    days.sort();
+    if days.len() == 0 {
+        days.push(String::from("25"));
+    }
     days.dedup();
 
     for day in days {

@@ -1,32 +1,9 @@
-use std::{
-    collections::HashSet,
-    fs::{File, OpenOptions},
-    io::{BufRead, BufReader},
-    time::Instant,
-};
+use crate::helper::input;
+use std::{collections::HashSet, time::Instant};
 
 const DAY: &str = "06";
 
 static OFFSETS: &'static [(i64, i64)] = &[(0, -1), (1, 0), (0, 1), (-1, 0)];
-
-fn get_lines(big_boy: bool) -> Vec<String> {
-    let filename: &str = if big_boy { "bigboy" } else { "input" };
-    let input_file: String = format!("src/day_{DAY}/{filename}.txt");
-
-    OpenOptions::new()
-        .write(true)
-        .create(true)
-        .open(input_file.clone())
-        .expect("Unable to open file");
-
-    let file: File = File::open(input_file.clone()).expect("Unable to open file");
-
-    let reader: BufReader<File> = BufReader::new(file);
-    return reader
-        .lines()
-        .map(|line| String::from(line.expect("Unable to read line").trim()))
-        .collect();
-}
 
 fn in_grid(grid: &Vec<Vec<char>>, pos: (i64, i64)) -> bool {
     return pos.0 >= 0
@@ -44,7 +21,7 @@ fn helper(
     init: (i64, i64),
     dir: usize,
     obstacle: (i64, i64),
-) -> (i64, HashSet<(i64, i64)>, bool) {
+) -> (HashSet<(i64, i64)>, bool) {
     let mut pos: (i64, i64) = init.clone();
     let mut cur_dir: usize = dir;
     let mut visited: HashSet<(i64, i64)> = HashSet::new();
@@ -70,7 +47,7 @@ fn helper(
         }
     }
 
-    return (visited.len() as i64, visited, in_loop);
+    return (visited, in_loop);
 }
 
 fn get_obstacle_positions(
@@ -111,9 +88,9 @@ fn solve_p(lines: Vec<String>, p2: bool) -> i64 {
         grid.push(row);
     }
 
-    let (walked, tmp_visited, _) = helper(&grid, init, dir, (-1, -1));
+    let (tmp_visited, _) = helper(&grid, init, dir, (-1, -1));
     if !p2 {
-        return walked;
+        return tmp_visited.len() as i64;
     }
 
     let visited: HashSet<(i64, i64)> = tmp_visited;
@@ -122,7 +99,7 @@ fn solve_p(lines: Vec<String>, p2: bool) -> i64 {
     let obstacles: Vec<(i64, i64)> = get_obstacle_positions(visited, height, width);
 
     for obstacle in obstacles {
-        let (_, _, in_loop) = helper(&grid, init, dir, obstacle);
+        let (_, in_loop) = helper(&grid, init, dir, obstacle);
         if in_loop {
             score += 1;
         }
@@ -132,7 +109,7 @@ fn solve_p(lines: Vec<String>, p2: bool) -> i64 {
 }
 
 pub fn solve(big_boy: bool) {
-    let lines: Vec<String> = get_lines(big_boy);
+    let lines: Vec<String> = input::get_lines(DAY, big_boy);
 
     let s1: Instant = Instant::now();
     let sc1: i64 = solve_p(lines.clone(), false);

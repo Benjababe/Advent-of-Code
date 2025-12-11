@@ -1,32 +1,8 @@
-use std::{
-    collections::HashSet,
-    fs::{File, OpenOptions},
-    io::{BufRead, BufReader},
-    time::Instant,
-};
-
+use crate::helper::input;
 use regex::Regex;
+use std::{collections::HashSet, env, time::Instant};
 
 const DAY: &str = "14";
-
-fn get_lines(big_boy: bool) -> Vec<String> {
-    let filename: &str = if big_boy { "bigboy" } else { "input" };
-    let input_file: String = format!("src/day_{DAY}/{filename}.txt");
-
-    OpenOptions::new()
-        .write(true)
-        .create(true)
-        .open(input_file.clone())
-        .expect("Unable to open file");
-
-    let file: File = File::open(input_file.clone()).expect("Unable to open file");
-
-    let reader: BufReader<File> = BufReader::new(file);
-    return reader
-        .lines()
-        .map(|line| String::from(line.expect("Unable to read line").trim()))
-        .collect();
-}
 
 fn solve_p(lines: Vec<String>, p2: bool) -> i64 {
     let mut robots: Vec<(i64, i64, i64, i64)> = Vec::new();
@@ -70,13 +46,7 @@ fn solve_p(lines: Vec<String>, p2: bool) -> i64 {
         }
 
         if no_overlap && p2 {
-            for y in 0..height {
-                for x in 0..width {
-                    print!("{}", if seen.contains(&(x, y)) { '#' } else { '.' })
-                }
-                println!();
-            }
-
+            print_tree(height, width, seen);
             return i;
         }
     }
@@ -99,8 +69,22 @@ fn solve_p(lines: Vec<String>, p2: bool) -> i64 {
     return quads[0] * quads[1] * quads[2] * quads[3];
 }
 
+fn print_tree(height: i64, width: i64, seen: HashSet<(i64, i64)>) {
+    let args: Vec<String> = env::args().collect();
+    if !args.contains(&"--print-tree".to_string()) {
+        return;
+    }
+
+    for y in 0..height {
+        for x in 0..width {
+            print!("{}", if seen.contains(&(x, y)) { '#' } else { '.' })
+        }
+        println!();
+    }
+}
+
 pub fn solve(big_boy: bool) {
-    let lines: Vec<String> = get_lines(big_boy);
+    let lines: Vec<String> = input::get_lines(DAY, big_boy);
 
     let s1: Instant = Instant::now();
     let sc1: i64 = solve_p(lines.clone(), false);

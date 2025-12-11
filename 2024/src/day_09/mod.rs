@@ -1,29 +1,7 @@
-use std::{
-    fs::{File, OpenOptions},
-    io::{BufRead, BufReader},
-    time::Instant,
-};
+use crate::helper::input;
+use std::time::Instant;
 
 const DAY: &str = "09";
-
-fn get_lines(big_boy: bool) -> Vec<String> {
-    let filename: &str = if big_boy { "bigboy" } else { "input" };
-    let input_file: String = format!("src/day_{DAY}/{filename}.txt");
-
-    OpenOptions::new()
-        .write(true)
-        .create(true)
-        .open(input_file.clone())
-        .expect("Unable to open file");
-
-    let file: File = File::open(input_file.clone()).expect("Unable to open file");
-
-    let reader: BufReader<File> = BufReader::new(file);
-    return reader
-        .lines()
-        .map(|line| String::from(line.expect("Unable to read line").trim()))
-        .collect();
-}
 
 fn solve_p1(lines: Vec<String>) -> i64 {
     let mut score: i64 = 0;
@@ -151,7 +129,7 @@ fn solve_p2(lines: Vec<String>) -> i64 {
 }
 
 pub fn solve(big_boy: bool) {
-    let lines: Vec<String> = get_lines(big_boy);
+    let lines: Vec<String> = input::get_lines(DAY, big_boy);
 
     let s1: Instant = Instant::now();
     let sc1: i64 = solve_p1(lines.clone());

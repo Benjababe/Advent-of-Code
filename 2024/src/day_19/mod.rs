@@ -1,30 +1,7 @@
-use std::{
-    collections::HashMap,
-    fs::{File, OpenOptions},
-    io::{BufRead, BufReader},
-    time::Instant,
-};
+use crate::helper::input;
+use std::{collections::HashMap, time::Instant};
 
 const DAY: &str = "19";
-
-fn get_lines(big_boy: bool) -> Vec<String> {
-    let filename: &str = if big_boy { "bigboy" } else { "input" };
-    let input_file: String = format!("src/day_{DAY}/{filename}.txt");
-
-    OpenOptions::new()
-        .write(true)
-        .create(true)
-        .open(input_file.clone())
-        .expect("Unable to open file");
-
-    let file: File = File::open(input_file.clone()).expect("Unable to open file");
-
-    let reader: BufReader<File> = BufReader::new(file);
-    return reader
-        .lines()
-        .map(|line| String::from(line.expect("Unable to read line")))
-        .collect();
-}
 
 fn check_possible(
     memoi: &mut HashMap<String, i64>,
@@ -77,7 +54,7 @@ fn solve_p(lines: Vec<String>, p2: bool) -> i64 {
 }
 
 pub fn solve(big_boy: bool) {
-    let lines: Vec<String> = get_lines(big_boy);
+    let lines: Vec<String> = input::get_lines(DAY, big_boy);
 
     let s1: Instant = Instant::now();
     let sc1: i64 = solve_p(lines.clone(), false);
