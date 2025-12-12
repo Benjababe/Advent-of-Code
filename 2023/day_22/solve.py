@@ -193,7 +193,7 @@ def get_score(lines: list[str]):
             s.union(next_s)
         p2 += len(to_collapse) - 1
 
-    print(f"Silver: {p1}\nGold: {p2}")
+    print(f"Day 22\tPt1: {p1}\nDay 22\tPt2: {p2}")
 
 
 if __name__ == "__main__":

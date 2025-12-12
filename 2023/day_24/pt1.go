@@ -1,4 +1,4 @@
-package main
+package day24
 
 import (
 	"fmt"
@@ -92,13 +92,13 @@ func solve(lines []string) int64 {
 	return p1
 }
 
-func main() {
+func Solve() {
 	lines := []string{}
 	helper.GetLines(&lines, "input.txt")
 
 	start := helper.GetCurrentTime()
 	p1 := solve(lines)
-	fmt.Printf("Silver: %d\n", p1)
+	fmt.Printf("Day 24\tPt1: %d\n", p1)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
 }

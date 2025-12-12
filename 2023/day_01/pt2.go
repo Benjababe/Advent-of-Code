@@ -1,8 +1,7 @@
-package main
+package day01
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/benjababe/advent-of-code/helper"
@@ -25,7 +24,7 @@ func replaceNumText(numMap map[string]string, line string) string {
 	return line
 }
 
-func solve(lines []string) int {
+func solvePt2(lines []string) int {
 	score := 0
 
 	numMap := map[string]string{
@@ -54,15 +53,13 @@ func solve(lines []string) int {
 	return score
 }
 
-func main() {
+func Pt2() {
 	lines := []string{}
 	helper.GetLines(&lines, "input.txt")
 
 	start := helper.GetCurrentTime()
-	output := solve(lines)
-	fmt.Printf("Output: %d\n", output)
+	output := solvePt2(lines)
+	fmt.Printf("Day 1\tPt2:\t%d\n", output)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
-
-	helper.CopyClipboard(strconv.Itoa(output))
 }

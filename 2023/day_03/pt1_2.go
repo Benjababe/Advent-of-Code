@@ -1,4 +1,4 @@
-package main
+package day03
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 
 type Cell struct {
 	Value int64
-	Id    int64
+	ID    int64
 }
 
 func isSymbol(char rune) bool {
@@ -30,7 +30,7 @@ func populateGrid(grid [][]Cell, lines []string) {
 			numStr := line[match[0]:match[1]]
 			for j := match[0]; j < match[1]; j++ {
 				num, _ := strconv.ParseInt(numStr, 10, 64)
-				grid[i][j] = Cell{Value: num, Id: idCount}
+				grid[i][j] = Cell{Value: num, ID: idCount}
 			}
 			idCount++
 		}
@@ -39,20 +39,19 @@ func populateGrid(grid [][]Cell, lines []string) {
 
 func getNumsAdjacent(grid [][]Cell, i int, j int) []int64 {
 	nums := []int64{}
-	numIds := []int64{}
+	numIDs := []int64{}
 
 	for _i := -1; _i <= 1; _i++ {
 		for _j := -1; _j <= 1; _j++ {
 			di, dj := i+_i, j+_j
-
 			if di < 0 || di >= len(grid) || dj < 0 || dj >= len(grid[di]) {
 				continue
 			}
 
 			cell := grid[di][dj]
-			if cell.Id > 0 && !slices.Contains(numIds, cell.Id) {
+			if cell.ID > 0 && !slices.Contains(numIDs, cell.ID) {
 				nums = append(nums, cell.Value)
-				numIds = append(numIds, cell.Id)
+				numIDs = append(numIDs, cell.ID)
 			}
 		}
 	}
@@ -60,14 +59,23 @@ func getNumsAdjacent(grid [][]Cell, i int, j int) []int64 {
 	return nums
 }
 
-func searchGrid(grid [][]Cell, lines []string) int64 {
+func searchGrid(grid [][]Cell, lines []string, pt2 bool) int64 {
 	score := int64(0)
 
 	for i, row := range lines {
 		for j, char := range row {
-			if isSymbol(char) {
-				for _, num := range getNumsAdjacent(grid, i, j) {
-					score += num
+			if !pt2 {
+				if isSymbol(char) {
+					for _, num := range getNumsAdjacent(grid, i, j) {
+						score += num
+					}
+				}
+			} else {
+				if char == '*' {
+					nums := getNumsAdjacent(grid, i, j)
+					if len(nums) == 2 {
+						score += nums[0] * nums[1]
+					}
 				}
 			}
 		}
@@ -76,21 +84,30 @@ func searchGrid(grid [][]Cell, lines []string) int64 {
 	return score
 }
 
-func solve(lines []string) int64 {
+func solve(lines []string, pt2 bool) int64 {
 	grid := make([][]Cell, len(lines))
 	populateGrid(grid, lines)
-	return searchGrid(grid, lines)
+	return searchGrid(grid, lines, pt2)
 }
 
-func main() {
+func Pt1() {
 	lines := []string{}
 	helper.GetLines(&lines, "input.txt")
 
 	start := helper.GetCurrentTime()
-	output := solve(lines)
-	fmt.Printf("Output: %d\n", output)
+	output := solve(lines, false)
+	fmt.Printf("Day 3\tPt1:\t%d\n", output)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
+}
 
-	helper.CopyClipboard(strconv.FormatInt(output, 10))
+func Pt2() {
+	lines := []string{}
+	helper.GetLines(&lines, "input.txt")
+
+	start := helper.GetCurrentTime()
+	output := solve(lines, true)
+	fmt.Printf("Day 3\tPt2:\t%d\n", output)
+	end := helper.GetCurrentTime()
+	helper.GetTimeTaken(start, end)
 }

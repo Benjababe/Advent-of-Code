@@ -1,4 +1,4 @@
-package main
+package day05
 
 import (
 	"fmt"
@@ -77,7 +77,7 @@ func getLowestLocation(farmMap FarmMap, categoryMap CatMap, seeds []int64) int64
 	return lowest
 }
 
-func solve(lines []string) int64 {
+func solvePt1(lines []string) int64 {
 	score := int64(0)
 
 	farmMap := make(FarmMap)
@@ -97,15 +97,13 @@ func solve(lines []string) int64 {
 	return score
 }
 
-func main() {
+func Pt1() {
 	lines := []string{}
 	helper.GetLines(&lines, "input.txt")
 
 	start := helper.GetCurrentTime()
-	output := solve(lines)
-	fmt.Printf("Output: %d\n", output)
+	output := solvePt1(lines)
+	fmt.Printf("Day 5\tPt1:\t%d\n", output)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
-
-	helper.CopyClipboard(strconv.FormatInt(output, 10))
 }

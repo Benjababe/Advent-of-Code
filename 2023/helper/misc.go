@@ -1,3 +1,3 @@
 package helper
 
-func Unused(x ...interface{}) {}
+func Unused(_ ...any) {}

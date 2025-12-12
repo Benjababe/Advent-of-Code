@@ -1,4 +1,4 @@
-package main
+package day14
 
 import (
 	"fmt"
@@ -142,9 +142,10 @@ func cycleGrid(grid [][]string) (int64, int64) {
 
 	for y, line := range grid {
 		for x, char := range line {
-			if char == "." {
+			switch char {
+			case ".":
 				obstacles[Coord{x, y}] = Obstacle(Blank)
-			} else if char == "#" {
+			case "#":
 				obstacles[Coord{x, y}] = Obstacle(Rock)
 			}
 		}
@@ -196,13 +197,14 @@ func solve(lines []string) (int64, int64) {
 	return p1, p2
 }
 
-func main() {
+func Solve() {
 	lines := []string{}
 	helper.GetLines(&lines, "input.txt")
 
 	start := helper.GetCurrentTime()
 	p1, p2 := solve(lines)
-	fmt.Printf("Silver: %d\nGold: %d\n", p1, p2)
+	fmt.Printf("Day 14\tPt1:\t%d\n", p1)
+	fmt.Printf("Day 14\tPt2:\t%d\n", p2)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
 }

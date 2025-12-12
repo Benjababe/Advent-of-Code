@@ -1,4 +1,4 @@
-package main
+package day16
 
 import (
 	"fmt"
@@ -27,25 +27,30 @@ func handleCell(cell rune, ray Ray) []Ray {
 	x, y := ray.coord.x, ray.coord.y
 	dx, dy := ray.velo.dx, ray.velo.dy
 
-	if cell == '/' {
+	switch {
+	case cell == '/':
 		dx, dy = -dy, -dx
 		newCoord := Coord{x + dx, y + dy}
 		return []Ray{{newCoord, Velocity{dx, dy}}}
-	} else if cell == '\\' {
+
+	case cell == '\\':
 		dx, dy = dy, dx
 		newCoord := Coord{x + dx, y + dy}
 		return []Ray{{newCoord, Velocity{dx, dy}}}
-	} else if cell == '-' && dx == 0 {
+
+	case cell == '-' && dx == 0:
 		return []Ray{
 			{Coord{x - 1, y}, Velocity{-1, 0}},
 			{Coord{x + 1, y}, Velocity{1, 0}},
 		}
-	} else if cell == '|' && dy == 0 {
+
+	case cell == '|' && dy == 0:
 		return []Ray{
 			{Coord{x, y - 1}, Velocity{0, -1}},
 			{Coord{x, y + 1}, Velocity{0, 1}},
 		}
-	} else {
+
+	default:
 		newCoord := Coord{x + dx, y + dy}
 		return []Ray{{newCoord, ray.velo}}
 	}
@@ -138,13 +143,14 @@ func solve(lines []string) (int64, int64) {
 	return p1, p2
 }
 
-func main() {
+func Solve() {
 	lines := []string{}
 	helper.GetLines(&lines, "input.txt")
 
 	start := helper.GetCurrentTime()
 	p1, p2 := solve(lines)
-	fmt.Printf("Silver: %d\nGold: %d\n", p1, p2)
+	fmt.Printf("Day 16\tPt1:\t%d\n", p1)
+	fmt.Printf("Day 16\tPt2:\t%d\n", p2)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
 }

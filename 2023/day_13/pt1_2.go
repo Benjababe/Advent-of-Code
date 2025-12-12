@@ -1,4 +1,4 @@
-package main
+package day13
 
 import (
 	"fmt"
@@ -27,9 +27,10 @@ func checkLeftRight(grid []string) (int64, int64) {
 		}
 
 		maxCount := int64(sRange * len(grid))
-		if count == maxCount {
+		switch count {
+		case maxCount:
 			p1 = int64(mirror)
-		} else if count == (maxCount - 1) {
+		case maxCount - 1:
 			p2 = int64(mirror)
 		}
 	}
@@ -59,9 +60,10 @@ func checkUpDown(grid []string) (int64, int64) {
 		}
 
 		maxCount := sRange * len(grid[0])
-		if count == maxCount {
+		switch count {
+		case maxCount:
 			p1 = int64(mirror)
-		} else if count == (maxCount - 1) {
+		case maxCount - 1:
 			p2 = int64(mirror)
 		}
 	}
@@ -95,13 +97,14 @@ func solve(lines []string) (int64, int64) {
 	return p1, p2
 }
 
-func main() {
+func Solve() {
 	lines := []string{}
 	helper.GetLines(&lines, "input.txt")
 
 	start := helper.GetCurrentTime()
 	p1, p2 := solve(lines)
-	fmt.Printf("Silver: %d\nGold: %d\n", p1, p2)
+	fmt.Printf("Day 13\tPt1:\t%d\n", p1)
+	fmt.Printf("Day 13\tPt2:\t%d\n", p2)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
 }

@@ -1,4 +1,4 @@
-package main
+package day10
 
 import (
 	"fmt"
@@ -108,11 +108,12 @@ func parseL2(char rune) []rune {
 	singles := []rune{'|', '7', 'F'}
 	doubles := []rune{'S'}
 
-	if slices.Contains(singles, char) {
+	switch {
+	case slices.Contains(singles, char):
 		chars = append(chars, []rune{'*', ' '}...)
-	} else if slices.Contains(doubles, char) {
+	case slices.Contains(doubles, char):
 		chars = append(chars, []rune{'*', '*'}...)
-	} else {
+	default:
 		chars = append(chars, []rune{' ', ' '}...)
 	}
 
@@ -217,13 +218,14 @@ func solve(lines []string) (int64, int64) {
 	return p1, p2
 }
 
-func main() {
+func Solve() {
 	lines := []string{}
 	helper.GetLines(&lines, "input.txt")
 
 	start := helper.GetCurrentTime()
 	p1, p2 := solve(lines)
-	fmt.Printf("Silver: %d\nGold: %d\n", p1, p2)
+	fmt.Printf("Day 10\tPt1:\t%d\n", p1)
+	fmt.Printf("Day 10\tPt2:\t%d\n", p2)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
 }

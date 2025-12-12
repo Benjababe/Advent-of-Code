@@ -1,9 +1,8 @@
-package main
+package day08
 
 import (
 	"fmt"
 	"regexp"
-	"strconv"
 	"strings"
 
 	"github.com/benjababe/advent-of-code/helper"
@@ -34,7 +33,7 @@ func lcm(nums []int64) int64 {
 	return res
 }
 
-func solve(lines []string) int64 {
+func solvePt2(lines []string) int64 {
 	score := int64(0)
 	steps := int64(0)
 
@@ -59,7 +58,7 @@ func solve(lines []string) int64 {
 		}
 	}
 
-	for helper.SlicesAny[int64](minSteps, func(steps int64) bool { return steps == 0 }) {
+	for helper.SlicesAny(minSteps, func(steps int64) bool { return steps == 0 }) {
 		for _, inst := range instructions {
 			steps++
 
@@ -77,15 +76,13 @@ func solve(lines []string) int64 {
 	return score
 }
 
-func main() {
+func Pt2() {
 	lines := []string{}
 	helper.GetLines(&lines, "input.txt")
 
 	start := helper.GetCurrentTime()
-	output := solve(lines)
-	fmt.Printf("Output: %d\n", output)
+	output := solvePt2(lines)
+	fmt.Printf("Day 8\tPt2:\t%d\n", output)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
-
-	helper.CopyClipboard(strconv.FormatInt(output, 10))
 }

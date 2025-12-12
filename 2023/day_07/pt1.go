@@ -1,4 +1,4 @@
-package main
+package day07
 
 import (
 	"fmt"
@@ -35,41 +35,40 @@ func getHandScore(hand string) int64 {
 
 	for _, char := range hand {
 		if char == curChar {
-			curCount += 1
+			curCount++
 		} else {
-			comboCounts[curCount] += 1
+			comboCounts[curCount]++
 			curChar = char
 			curCount = 1
 		}
 	}
 
-	if comboCounts[2] == 1 && comboCounts[3] == 0 {
+	switch {
+	case comboCounts[2] == 1 && comboCounts[3] == 0:
 		hScore = comboScores["onePair"]
-	} else if comboCounts[2] == 2 {
+	case comboCounts[2] == 2:
 		hScore = comboScores["twoPair"]
-	} else if comboCounts[2] == 0 && comboCounts[3] == 1 {
+	case comboCounts[2] == 0 && comboCounts[3] == 1:
 		hScore = comboScores["threeOfAKind"]
-	} else if comboCounts[2] == 1 && comboCounts[3] == 1 {
+	case comboCounts[2] == 1 && comboCounts[3] == 1:
 		hScore = comboScores["fullHouse"]
-	} else if comboCounts[4] == 1 {
+	case comboCounts[4] == 1:
 		hScore = comboScores["fourOfAKind"]
-	} else if comboCounts[5] == 1 {
+	case comboCounts[5] == 1:
 		hScore = comboScores["fiveOfAKind"]
-	} else {
+	default:
 		hScore = comboScores["highCard"]
 	}
 
 	return hScore
 }
 
-func cmpHandString(h1, h2 string) bool {
+func cmpHandString(h1, h2 string, cardOrder string) bool {
 	for i := range h1 {
 		c1, c2 := string(h1[i]), string(h2[i])
 		i1, i2 := strings.Index(cardOrder, c1), strings.Index(cardOrder, c2)
 
-		if i1 == i2 {
-			continue
-		} else {
+		if i1 != i2 {
 			return i1 < i2
 		}
 	}
@@ -77,17 +76,17 @@ func cmpHandString(h1, h2 string) bool {
 	return false
 }
 
-func sortHands(hands []Hand) {
+func sortHands(hands []Hand, cardOrder string) {
 	sort.Slice(hands, func(i, j int) bool {
 		if hands[i].score == hands[j].score {
-			return cmpHandString(hands[i].hand, hands[j].hand)
+			return cmpHandString(hands[i].hand, hands[j].hand, cardOrder)
 		}
 
 		return hands[i].score < hands[j].score
 	})
 }
 
-func solve(lines []string) int64 {
+func solvePt1(lines []string) int64 {
 	score := int64(0)
 	hands := []Hand{}
 
@@ -101,7 +100,7 @@ func solve(lines []string) int64 {
 		hands = append(hands, Hand{bid, handScore, handStr})
 	}
 
-	sortHands(hands)
+	sortHands(hands, cardOrder)
 	for i, hand := range hands {
 		score += int64(i+1) * hand.bid
 	}
@@ -109,15 +108,13 @@ func solve(lines []string) int64 {
 	return score
 }
 
-func main() {
+func Pt1() {
 	lines := []string{}
 	helper.GetLines(&lines, "input.txt")
 
 	start := helper.GetCurrentTime()
-	output := solve(lines)
-	fmt.Printf("Output: %d\n", output)
+	output := solvePt1(lines)
+	fmt.Printf("Day 7\tPt1:\t%d\n", output)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
-
-	helper.CopyClipboard(strconv.FormatInt(output, 10))
 }

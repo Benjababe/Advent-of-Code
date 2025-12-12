@@ -159,7 +159,7 @@ def solve(lines: list[str]):
     vals = [[1, 4000], [1, 4000], [1, 4000], [1, 4000]]
     parse_part2(wf_dict, "in", vals)
 
-    print(f"Silver: {pt1}\nGold: {pt2}")
+    print(f"Day 19\tPt1: {pt1}\nDay 19\tPt2: {pt2}")
 
 
 if __name__ == "__main__":

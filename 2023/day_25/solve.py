@@ -30,4 +30,5 @@ def get_score(lines: list[str]) -> int:
 if __name__ == "__main__":
     lines = get_lines("input.txt")
     score = get_score(lines)
-    print(f"Score: {score}")
+    print(f"Day 25\tPt1: {score}")
+    print(f"Day 25\tPt2: Merry Christmas!!")

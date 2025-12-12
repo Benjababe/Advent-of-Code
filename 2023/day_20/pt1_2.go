@@ -1,4 +1,4 @@
-package main
+package day20
 
 import (
 	"fmt"
@@ -80,7 +80,7 @@ func sendPulse(instruction Instruction) []Instruction {
 		module.memory[from] = instruction.pulse
 
 		v := maps.Values(module.memory)
-		ts := helper.SlicesAll[int](v, func(i int) bool { return i == 1 })
+		ts := helper.SlicesAll(v, func(i int) bool { return i == 1 })
 		toSend := 1
 		if ts {
 			toSend = 0
@@ -115,17 +115,18 @@ func solve(lines []string) (int64, int64) {
 	broadcast := []Instruction{}
 
 	for _, line := range lines {
-		if line[0] == 'b' {
+		switch line[0] {
+		case 'b':
 			childrenStr := strings.TrimSpace(strings.Split(line, " -> ")[1])
 			children := strings.Split(childrenStr, ", ")
 			for _, child := range children {
 				broadcast = append(broadcast, Instruction{"broadcaster", child, 0})
 			}
-		} else if line[0] == '%' {
+		case '%':
 			spl := strings.Split(line, " -> ")
 			ff, mods := spl[0][1:], strings.Split(strings.TrimSpace(spl[1]), ", ")
 			modules[ff] = Module{"ff", 0, map[string]int{}, mods}
-		} else if line[0] == '&' {
+		case '&':
 			spl := strings.Split(line, " -> ")
 			cjt, mods := spl[0][1:], strings.Split(strings.TrimSpace(spl[1]), ", ")
 			modules[cjt] = Module{"cjt", 0, map[string]int{}, mods}
@@ -169,13 +170,14 @@ func solve(lines []string) (int64, int64) {
 	return p1, p2
 }
 
-func main() {
+func Solve() {
 	lines := []string{}
 	helper.GetLines(&lines, "input.txt")
 
 	start := helper.GetCurrentTime()
 	p1, p2 := solve(lines)
-	fmt.Printf("Silver: %d\nGold: %d\n", p1, p2)
+	fmt.Printf("Day 20\tPt1:\t%d\n", p1)
+	fmt.Printf("Day 20\tPt2:\t%d\n", p2)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
 }

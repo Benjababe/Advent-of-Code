@@ -1,4 +1,4 @@
-package main
+package day06
 
 import (
 	"fmt"
@@ -34,10 +34,11 @@ func solve(lines []string) {
 	}
 	scores[1] = getButtonCombinations(cTime, cDist)
 
-	fmt.Printf("Silver: %d\nGold: %d\n", scores[0], scores[1])
+	fmt.Printf("Day 6\tPt1:\t%d\n", scores[0])
+	fmt.Printf("Day 6\tPt2:\t%d\n", scores[1])
 }
 
-func main() {
+func Solve() {
 	lines := []string{}
 	helper.GetLines(&lines, "input.txt")
 

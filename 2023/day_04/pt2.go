@@ -1,16 +1,15 @@
-package main
+package day04
 
 import (
 	"fmt"
 	"regexp"
 	"slices"
-	"strconv"
 	"strings"
 
 	"github.com/benjababe/advent-of-code/helper"
 )
 
-func solve(lines []string) int64 {
+func solvePt2(lines []string) int64 {
 	score := int64(0)
 	cardCount := make(map[int]int64)
 
@@ -30,7 +29,7 @@ func solve(lines []string) int64 {
 		for _, number := range hasSlice {
 			number = strings.TrimSpace(number)
 			if slices.Contains(winnerSlice, number) && number != "" {
-				winCount += 1
+				winCount++
 			}
 		}
 
@@ -49,15 +48,13 @@ func solve(lines []string) int64 {
 	return score
 }
 
-func main() {
+func Pt2() {
 	lines := []string{}
 	helper.GetLines(&lines, "input.txt")
 
 	start := helper.GetCurrentTime()
-	output := solve(lines)
-	fmt.Printf("Output: %d\n", output)
+	output := solvePt2(lines)
+	fmt.Printf("Day 4\tPt2:\t%d\n", output)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
-
-	helper.CopyClipboard(strconv.FormatInt(output, 10))
 }

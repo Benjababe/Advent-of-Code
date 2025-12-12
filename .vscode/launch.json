@@ -5,11 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Go: Current file",
+      "name": "Go: Debug 2023",
       "type": "go",
       "request": "launch",
       "mode": "debug",
-      "program": "${file}"
+      "program": "${workspaceFolder}/2023",
+      "cwd": "${workspaceFolder}/2023"
     },
     {
       "name": "Python: Current File",

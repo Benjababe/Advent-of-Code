@@ -1,4 +1,4 @@
-package main
+package day02
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"github.com/benjababe/advent-of-code/helper"
 )
 
-func solve(lines []string) int {
+func solvePt1(lines []string) int {
 	score := 0
 	cubeMax := map[string]int{"r": 12, "g": 13, "b": 14}
 
@@ -36,15 +36,13 @@ func solve(lines []string) int {
 	return score
 }
 
-func main() {
+func Pt1() {
 	lines := []string{}
 	helper.GetLines(&lines, "input.txt")
 
 	start := helper.GetCurrentTime()
-	output := solve(lines)
-	fmt.Printf("Output: %d\n", output)
+	output := solvePt1(lines)
+	fmt.Printf("Day 2\tPt1:\t%d\n", output)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
-
-	helper.CopyClipboard(strconv.Itoa(output))
 }

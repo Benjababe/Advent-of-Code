@@ -1,4 +1,4 @@
-package main
+package day02
 
 import (
 	"fmt"
@@ -32,15 +32,14 @@ func solve(lines []string) int {
 	return score
 }
 
-func main() {
+func Pt2() {
 	lines := []string{}
-	helper.GetLines(&lines, "bigboy03.txt")
+	helper.GetLines(&lines, "input.txt")
 
 	start := helper.GetCurrentTime()
 	output := solve(lines)
-	fmt.Printf("Output: %d\n", output)
+	fmt.Printf("Day 2\tPt2:\t%d\n", output)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
 
-	helper.CopyClipboard(strconv.Itoa(output))
 }

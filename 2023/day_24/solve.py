@@ -1,5 +1,3 @@
-import subprocess
-
 import z3
 
 
@@ -37,7 +35,7 @@ def z3_cheating(stones: list[tuple[list[int], list[int]]]):
     s.check()
     m = s.model()
 
-    print(f"Position: [{m[x]}, {m[y]}, {m[z]}]\nVelocity: [{m[dx]}, {m[dy]}, {m[dz]}]")
+    # print(f"Position: [{m[x]}, {m[y]}, {m[z]}]\nVelocity: [{m[dx]}, {m[dy]}, {m[dz]}]")
     return eval(f"{m[x]} + {m[y]} + {m[z]}")
 
 
@@ -59,4 +57,4 @@ if __name__ == "__main__":
     lines = get_lines("input.txt")
     score = get_init_pos(lines)
 
-    print(f"Sum of positions: {score}")
+    print(f"Day 24\tPt2: {score}")

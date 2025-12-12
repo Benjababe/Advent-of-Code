@@ -1,4 +1,4 @@
-package main
+package day05
 
 import (
 	"fmt"
@@ -8,21 +8,12 @@ import (
 	"github.com/benjababe/advent-of-code/helper"
 )
 
-type FarmMap = map[string](map[string][]FarmTransform)
-type CatMap = map[string]string
-
-type FarmTransform struct {
-	srcStart int64
-	dstStart int64
-	rng      int64
-}
-
 type SeedPair struct {
 	start int64
 	rng   int64
 }
 
-func populateMaps(farmMap FarmMap, categoryMap CatMap, lines []string) {
+func populateMaps2(farmMap FarmMap, categoryMap CatMap, lines []string) {
 	from, to := "", ""
 	mapRegex := regexp.MustCompile(`(\w+)-to-(\w+) map:`)
 	rngRegex := regexp.MustCompile(`(\d+) (\d+) (\d+)`)
@@ -48,14 +39,14 @@ func populateMaps(farmMap FarmMap, categoryMap CatMap, lines []string) {
 			rng, _ := strconv.ParseInt(rngMatch[3], 10, 64)
 
 			tfs := farmMap[to][from]
-			tfs = append(tfs, FarmTransform{srcStart, dstStart, rng})
+			tfs = append(tfs, FarmTransform{dstStart, srcStart, rng})
 			farmMap[to][from] = tfs
 		}
 	}
 }
 
-func getLowestLocation(farmMap FarmMap, categoryMap CatMap, seedPairs []SeedPair) int64 {
-	for loc := int64(0); loc < 1e11; loc++ {
+func getLowestLocation2(farmMap FarmMap, categoryMap CatMap, seedPairs []SeedPair) int64 {
+	for loc := range int64(1e11) {
 		category := "location"
 		catVal := loc
 
@@ -82,13 +73,13 @@ func getLowestLocation(farmMap FarmMap, categoryMap CatMap, seedPairs []SeedPair
 	return -1
 }
 
-func solve(lines []string) int64 {
+func solvePt2(lines []string) int64 {
 	score := int64(0)
 
 	farmMap := make(FarmMap)
 	categoryMap := make(CatMap)
 
-	populateMaps(farmMap, categoryMap, lines)
+	populateMaps2(farmMap, categoryMap, lines)
 
 	seeds := make([]SeedPair, 0)
 	seedRegex := regexp.MustCompile(`(\d+)\s(\d+)`)
@@ -98,20 +89,18 @@ func solve(lines []string) int64 {
 		seedRange, _ := strconv.ParseInt(seedMatch[2], 10, 64)
 		seeds = append(seeds, SeedPair{seedStart, seedRange})
 	}
-	score = getLowestLocation(farmMap, categoryMap, seeds)
+	score = getLowestLocation2(farmMap, categoryMap, seeds)
 
 	return score
 }
 
-func main() {
+func Pt2() {
 	lines := []string{}
 	helper.GetLines(&lines, "input.txt")
 
 	start := helper.GetCurrentTime()
-	output := solve(lines)
-	fmt.Printf("Output: %d\n", output)
+	output := solvePt2(lines)
+	fmt.Printf("Day 5\tPt2:\t%d\n", output)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
-
-	helper.CopyClipboard(strconv.FormatInt(output, 10))
 }

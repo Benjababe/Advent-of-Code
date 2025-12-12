@@ -1,4 +1,4 @@
-package main
+package day21
 
 import (
 	"fmt"
@@ -79,7 +79,8 @@ func solve(lines []string) (int64, int64) {
 		queue = nextQueue
 	}
 
-	// Plug in polynomial values here
+	// Plug in polynomial values here, where the polynomial is:
+	// ax^2 + bx + c
 	a, b, c := int64(14812), int64(14925), int64(3759)
 
 	x := int64(maxPt2 / len(grid))
@@ -88,13 +89,14 @@ func solve(lines []string) (int64, int64) {
 	return p1, p2
 }
 
-func main() {
+func Solve() {
 	lines := []string{}
 	helper.GetLines(&lines, "input.txt")
 
 	start := helper.GetCurrentTime()
 	p1, p2 := solve(lines)
-	fmt.Printf("Silver: %d\nGold: %d\n", p1, p2)
+	fmt.Printf("Day 21\tPt1:\t%d\n", p1)
+	fmt.Printf("Day 21\tPt2:\t%d\n", p2)
 	end := helper.GetCurrentTime()
 	helper.GetTimeTaken(start, end)
 }
