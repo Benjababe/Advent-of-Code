@@ -9,7 +9,7 @@ class Region:
         self.width = width
         self.height = height
         self.req = req.copy()
-        self.grid = [['.' for _ in range(width)] for _ in range(height)]
+        self.grid = [["." for _ in range(width)] for _ in range(height)]
 
 
 def format_time(sec: float) -> str:
@@ -36,7 +36,11 @@ def get_score(raw_presents: list[str]) -> int:
     score = 0
 
     presents = [[[c for c in row] for row in p.split()[1:]] for p in raw_presents[:-1]]
-    present_usages = [sum([sum([1 if c == "#" else 0 for c in row]) for row in present]) for present in presents]
+    present_usages = [
+        sum([sum([1 if c == "#" else 0 for c in row]) for row in present])
+        for present in presents
+    ]
+    populate_present_combos(presents)
 
     raw_regions = raw_presents[-1].split("\n")
     for raw_region in raw_regions:
@@ -51,15 +55,13 @@ def get_score(raw_presents: list[str]) -> int:
             score += 1
 
         # Brootbros...
-        # score += bruteforce(deepcopy(presents), Region(dims[0], dims[1], req.copy()))
+        # score += bruteforce(Region(dims[0], dims[1], req.copy()))
 
     return score
 
 
-def bruteforce(presents: list[list[list[str]]], region: Region) -> int:
+def populate_present_combos(presents: list[list[list[str]]]):
     global present_combos
-    score = 0
-
     for present in presents:
         present_permutations = [present, flip_x(present), flip_y(present)]
         for i in range(3):
@@ -69,7 +71,7 @@ def bruteforce(presents: list[list[list[str]]], region: Region) -> int:
             present_permutations.append(flip_y(present))
 
         prune: set[str] = set()
-        for i in range(len(present_permutations)-1, -1, -1):
+        for i in range(len(present_permutations) - 1, -1, -1):
             grid_str = grid_to_str(present_permutations[i])
             if grid_str not in prune:
                 prune.add(grid_str)
@@ -77,6 +79,9 @@ def bruteforce(presents: list[list[list[str]]], region: Region) -> int:
                 del present_permutations[i]
         present_combos.append(deepcopy(present_permutations))
 
+
+def bruteforce(region: Region) -> int:
+    score = 0
     score += 1 if put_present(region.grid, region.req) else 0
     return score
 
@@ -98,6 +103,8 @@ def grid_to_str(grid: list[list[str]]) -> str:
 
 
 def put_present(grid: list[list[str]], req: list[int]) -> bool:
+    global present_combos
+
     if all([r == 0 for r in req]):
         return True
 
@@ -108,39 +115,46 @@ def put_present(grid: list[list[str]], req: list[int]) -> bool:
         if num > 0:
             present_idx = i
             presents = present_combos[i]
-            new_req = [r if idx != i else r-1 for idx, r in enumerate(req)]
+            new_req = [r if idx != i else r - 1 for idx, r in enumerate(req)]
             break
 
     for present in presents:
         present_width, present_height = len(present[0]), len(present)
         for y in range(len(grid) - present_height + 1):
-            for x in range(len(grid[y]) - present_width + 1):
+            for x in range(len(grid[0]) - present_width + 1):
                 if grid[y][x] != ".":
                     continue
 
-                new_grid, check = check_present_fit(grid, present, present_idx, x, y)
+                fill_coords, check = check_present_fit(grid, present, x, y)
                 if not check:
                     continue
 
-                if put_present(new_grid, new_req):
+                chars = "ABCDEF"
+                for fx, fy in fill_coords:
+                    grid[fy][fx] = chars[present_idx]
+
+                if put_present(grid, new_req):
                     return True
+
+                for fx, fy in fill_coords:
+                    grid[fy][fx] = "."
 
     return False
 
 
-def check_present_fit(grid: list[list[str]], present: list[list[str]], p_i: int, px: int, py: int) -> tuple[list[list[str]], bool]:
-    fill_coords = []
+def check_present_fit(
+    grid: list[list[str]], present: list[list[str]], px: int, py: int
+) -> tuple[list[tuple[int, int]], bool]:
+    fill_coords: list[tuple[int, int]] = []
     for y in range(len(present)):
         for x in range(len(present[y])):
             if present[y][x] == "#":
-                if grid[py+y][px+x] == ".":
-                    fill_coords.append((px+x, py+y))
+                if grid[py + y][px + x] == ".":
+                    fill_coords.append((px + x, py + y))
                 else:
                     return [], False
 
-    chars = "ABCDEF"
-    new_grid = [[chars[p_i] if (x, y) in fill_coords else c for x, c in enumerate(row)] for y, row in enumerate(grid)]
-    return new_grid, True
+    return fill_coords, True
 
 
 if __name__ == "__main__":
